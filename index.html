@@ -1,0 +1,899 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Assessment Developer Application</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #333;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        .form-container {
+            padding: 40px;
+        }
+
+        .section {
+            margin-bottom: 40px;
+            border: 2px solid #f0f0f0;
+            border-radius: 10px;
+            padding: 25px;
+            transition: border-color 0.3s;
+        }
+
+        .section:hover {
+            border-color: #4facfe;
+        }
+
+        .section h2 {
+            color: #4facfe;
+            margin-bottom: 20px;
+            font-size: 1.4rem;
+            display: flex;
+            align-items: center;
+        }
+
+        .section h2::before {
+            content: '';
+            width: 4px;
+            height: 20px;
+            background: #4facfe;
+            margin-right: 10px;
+            border-radius: 2px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #555;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e1e1e1;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #4facfe;
+            box-shadow: 0 0 0 3px rgba(79, 172, 254, 0.1);
+        }
+
+        .form-group textarea {
+            height: 100px;
+            resize: vertical;
+        }
+
+        .checkbox-group {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin-top: 10px;
+        }
+
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            border: 1px solid #e1e1e1;
+            border-radius: 6px;
+            transition: all 0.3s;
+        }
+
+        .checkbox-item:hover {
+            background: #f8f9ff;
+            border-color: #4facfe;
+        }
+
+        .checkbox-item input[type="checkbox"] {
+            width: auto;
+            margin-right: 10px;
+            transform: scale(1.2);
+        }
+
+        .color-input {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .color-input input[type="color"] {
+            width: 50px;
+            height: 40px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        .color-input input[type="text"] {
+            flex: 1;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.3s;
+            width: 100%;
+            margin-top: 20px;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(79, 172, 254, 0.4);
+        }
+
+        .btn-primary:active {
+            transform: translateY(0);
+        }
+
+        .output-section {
+            display: none;
+            background: #f8f9ff;
+            border: 2px solid #4facfe;
+            border-radius: 10px;
+            padding: 25px;
+            margin-top: 30px;
+        }
+
+        .output-section h3 {
+            color: #4facfe;
+            margin-bottom: 15px;
+            font-size: 1.3rem;
+        }
+
+        .code-output {
+            background: #1e1e1e;
+            color: #f8f8f2;
+            padding: 20px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            line-height: 1.4;
+            max-height: 500px;
+            overflow-y: auto;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+
+        .copy-btn {
+            background: #28a745;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            margin-top: 10px;
+            font-weight: 600;
+        }
+
+        .copy-btn:hover {
+            background: #218838;
+        }
+
+        .questions-container {
+            border: 1px solid #e1e1e1;
+            border-radius: 8px;
+            padding: 15px;
+            margin-top: 10px;
+            background: #f9f9f9;
+        }
+
+        .question-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 10px;
+            padding: 10px;
+            background: white;
+            border-radius: 6px;
+            border: 1px solid #e1e1e1;
+        }
+
+        .question-item input {
+            flex: 1;
+            border: 1px solid #ddd;
+            padding: 8px;
+        }
+
+        .remove-question {
+            background: #dc3545;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+
+        .add-question {
+            background: #28a745;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 6px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        .categories-container {
+            border: 1px solid #e1e1e1;
+            border-radius: 8px;
+            padding: 15px;
+            margin-top: 10px;
+            background: #f9f9f9;
+        }
+
+        .category-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 10px;
+            padding: 10px;
+            background: white;
+            border-radius: 6px;
+            border: 1px solid #e1e1e1;
+        }
+
+        .category-item input {
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        .category-item input:first-child {
+            flex: 1;
+        }
+
+        .category-item textarea {
+            flex: 2;
+            min-height: 60px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            padding: 8px;
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+
+            .header {
+                padding: 20px;
+            }
+
+            .header h1 {
+                font-size: 2rem;
+            }
+
+            .form-container {
+                padding: 20px;
+            }
+
+            .section {
+                padding: 15px;
+            }
+
+            .checkbox-group {
+                grid-template-columns: 1fr;
+            }
+
+            .question-item,
+            .category-item {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .question-item input,
+            .category-item input,
+            .category-item textarea {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🚀 Assessment Developer</h1>
+            <p>Create professional assessments with custom HTML code generation</p>
+        </div>
+
+        <div class="form-container">
+            <form id="assessmentForm">
+                <!-- Basic Information -->
+                <div class="section">
+                    <h2>📋 Basic Information</h2>
+                    
+                    <div class="form-group">
+                        <label for="assessmentName">Assessment Name *</label>
+                        <input type="text" id="assessmentName" required placeholder="e.g., Leadership Style Assessment">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="assessmentDescription">Brief Description *</label>
+                        <textarea id="assessmentDescription" required placeholder="Describe what this assessment measures..."></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="methodology">Based on Published Methodology?</label>
+                        <input type="text" id="methodology" placeholder="e.g., Myers-Briggs, DISC, or leave blank if custom">
+                    </div>
+                </div>
+
+                <!-- Questions Configuration -->
+                <div class="section">
+                    <h2>❓ Questions Configuration</h2>
+                    
+                    <div class="form-group">
+                        <label for="questionCount">Number of Questions *</label>
+                        <input type="number" id="questionCount" min="1" max="50" value="8" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="answerType">Answer Type *</label>
+                        <select id="answerType" required>
+                            <option value="">Select answer type...</option>
+                            <option value="yesno">Yes/No</option>
+                            <option value="multiple">Multiple Choice</option>
+                            <option value="scale">Sliding Scale (1-5)</option>
+                            <option value="input">Input Fields</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Custom Questions (optional - will generate default if left blank)</label>
+                        <div class="questions-container" id="questionsContainer">
+                            <!-- Questions will be added dynamically -->
+                        </div>
+                        <button type="button" class="add-question" onclick="addQuestion()">+ Add Question</button>
+                    </div>
+                </div>
+
+                <!-- Result Categories -->
+                <div class="section">
+                    <h2>🎯 Result Categories</h2>
+                    
+                    <div class="form-group">
+                        <label>Categories (leave blank to auto-generate based on methodology)</label>
+                        <div class="categories-container" id="categoriesContainer">
+                            <!-- Categories will be added dynamically -->
+                        </div>
+                        <button type="button" class="add-question" onclick="addCategory()">+ Add Category</button>
+                    </div>
+                </div>
+
+                <!-- User Input Fields -->
+                <div class="section">
+                    <h2>👤 User Input Fields</h2>
+                    
+                    <div class="checkbox-group">
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="includeName" checked>
+                            <label for="includeName">Include Name Field</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="includeEmail" checked>
+                            <label for="includeEmail">Include Email Field</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="includeCompany">
+                            <label for="includeCompany">Include Company Field</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="includeCell">
+                            <label for="includeCell">Include Cell/Phone Field</label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Technical Requirements -->
+                <div class="section">
+                    <h2>⚙️ Technical Requirements</h2>
+                    
+                    <div class="checkbox-group">
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="mobileCompatible" checked>
+                            <label for="mobileCompatible">Mobile Phone Compatible</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="wordpressCompatible" checked>
+                            <label for="wordpressCompatible">WordPress Compatible</label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Design Settings -->
+                <div class="section">
+                    <h2>🎨 Design Settings</h2>
+                    
+                    <div class="form-group">
+                        <label for="logoLink">Logo URL</label>
+                        <input type="url" id="logoLink" placeholder="https://example.com/logo.png">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="actionLink">Action Button Link</label>
+                        <input type="url" id="actionLink" placeholder="https://example.com/contact">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="backgroundColor">Background Color</label>
+                        <div class="color-input">
+                            <input type="color" id="backgroundColorPicker" value="#f5f5f5">
+                            <input type="text" id="backgroundColor" value="#f5f5f5">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="fontColor">Font Color</label>
+                        <div class="color-input">
+                            <input type="color" id="fontColorPicker" value="#333333">
+                            <input type="text" id="fontColor" value="#333333">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="headerColor">Header & Button Color</label>
+                        <div class="color-input">
+                            <input type="color" id="headerColorPicker" value="#1e3a8a">
+                            <input type="text" id="headerColor" value="#1e3a8a">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Results Configuration -->
+                <div class="section">
+                    <h2>📊 Results Configuration</h2>
+                    
+                    <div class="checkbox-group">
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="showScore">
+                            <label for="showScore">Show Resultant Score</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="showPersonaInfo" checked>
+                            <label for="showPersonaInfo">Display Name & Company</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="showCategory" checked>
+                            <label for="showCategory">Show Result Category</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="showActionButton" checked>
+                            <label for="showActionButton">Include Action Button</label>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="actionText">Action Button Text</label>
+                        <input type="text" id="actionText" value="Get Started Today" placeholder="e.g., Contact Us, Learn More">
+                    </div>
+                </div>
+
+                <button type="submit" class="btn-primary">🚀 Generate Assessment Code</button>
+            </form>
+
+            <div class="output-section" id="outputSection">
+                <h3>📝 Generated HTML Code</h3>
+                <button class="copy-btn" onclick="copyCode()">📋 Copy to Clipboard</button>
+                <div class="code-output" id="codeOutput"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Color picker synchronization
+        function syncColorPickers() {
+            const colorPairs = [
+                ['backgroundColorPicker', 'backgroundColor'],
+                ['fontColorPicker', 'fontColor'],
+                ['headerColorPicker', 'headerColor']
+            ];
+
+            colorPairs.forEach(([picker, input]) => {
+                document.getElementById(picker).addEventListener('input', (e) => {
+                    document.getElementById(input).value = e.target.value;
+                });
+
+                document.getElementById(input).addEventListener('input', (e) => {
+                    if (/^#[0-9A-F]{6}$/i.test(e.target.value)) {
+                        document.getElementById(picker).value = e.target.value;
+                    }
+                });
+            });
+        }
+
+        // Add question functionality
+        function addQuestion() {
+            const container = document.getElementById('questionsContainer');
+            const questionCount = container.children.length + 1;
+            
+            const questionDiv = document.createElement('div');
+            questionDiv.className = 'question-item';
+            questionDiv.innerHTML = `
+                <input type="text" placeholder="Question ${questionCount}" name="customQuestion">
+                <button type="button" class="remove-question" onclick="removeQuestion(this)">Remove</button>
+            `;
+            
+            container.appendChild(questionDiv);
+        }
+
+        function removeQuestion(button) {
+            button.parentElement.remove();
+            updateQuestionNumbers();
+        }
+
+        function updateQuestionNumbers() {
+            const questions = document.querySelectorAll('#questionsContainer input');
+            questions.forEach((input, index) => {
+                input.placeholder = `Question ${index + 1}`;
+            });
+        }
+
+        // Add category functionality
+        function addCategory() {
+            const container = document.getElementById('categoriesContainer');
+            
+            const categoryDiv = document.createElement('div');
+            categoryDiv.className = 'category-item';
+            categoryDiv.innerHTML = `
+                <input type="text" placeholder="Category Name" name="categoryName">
+                <textarea placeholder="Category Description" name="categoryDescription"></textarea>
+                <button type="button" class="remove-question" onclick="removeCategory(this)">Remove</button>
+            `;
+            
+            container.appendChild(categoryDiv);
+        }
+
+        function removeCategory(button) {
+            button.parentElement.remove();
+        }
+
+        // Generate default categories based on methodology
+        function generateDefaultCategories(methodology, questionCount) {
+            if (!methodology) {
+                // Generic categories based on score ranges
+                const ranges = Math.ceil(questionCount / 3);
+                return [
+                    { name: 'High Level', description: 'You demonstrate strong capabilities in this area.' },
+                    { name: 'Moderate Level', description: 'You show good potential with room for development.' },
+                    { name: 'Developing Level', description: 'This is an area where focused development could benefit you.' }
+                ];
+            }
+
+            const methodologyLower = methodology.toLowerCase();
+            
+            if (methodologyLower.includes('leadership')) {
+                return [
+                    { name: 'Transformational Leader', description: 'You inspire and motivate others through vision and personal example.' },
+                    { name: 'Transactional Leader', description: 'You lead through structure, rewards, and clear expectations.' },
+                    { name: 'Servant Leader', description: 'You lead by serving others and putting their needs first.' },
+                    { name: 'Emerging Leader', description: 'You show leadership potential and are developing your style.' }
+                ];
+            } else if (methodologyLower.includes('personality') || methodologyLower.includes('disc')) {
+                return [
+                    { name: 'Dominant', description: 'You are direct, results-focused, and confident in your approach.' },
+                    { name: 'Influential', description: 'You are enthusiastic, persuasive, and people-oriented.' },
+                    { name: 'Steady', description: 'You are patient, reliable, and prefer stability and cooperation.' },
+                    { name: 'Conscientious', description: 'You are analytical, detail-oriented, and quality-focused.' }
+                ];
+            } else {
+                return [
+                    { name: 'Advanced', description: 'You demonstrate advanced skills and understanding in this area.' },
+                    { name: 'Proficient', description: 'You show solid competence with consistent performance.' },
+                    { name: 'Developing', description: 'You are building skills and showing good progress.' },
+                    { name: 'Beginning', description: 'This is a growth area with significant development opportunities.' }
+                ];
+            }
+        }
+
+        // Generate default questions based on answer type and methodology
+        function generateDefaultQuestions(answerType, methodology, questionCount) {
+            let questions = [];
+            
+            if (methodology && methodology.toLowerCase().includes('leadership')) {
+                questions = [
+                    "How do you typically approach decision-making?",
+                    "What motivates you most when leading others?",
+                    "How do you handle conflict within your team?",
+                    "What's your preferred communication style?",
+                    "How do you respond to change and uncertainty?",
+                    "What role does feedback play in your leadership?",
+                    "How do you develop others on your team?",
+                    "What drives your leadership philosophy?",
+                    "How do you build trust with your team?",
+                    "What's your approach to setting goals?"
+                ];
+            } else if (methodology && methodology.toLowerCase().includes('innovation')) {
+                questions = [
+                    "How quickly do you adopt new technologies?",
+                    "How do you respond to change in your environment?",
+                    "What's your approach to starting new projects?",
+                    "How comfortable are you with uncertainty?",
+                    "How do you stay informed about trends?",
+                    "How much do you rely on others' opinions?",
+                    "How do you feel about being first to try something?",
+                    "How do you view failure when trying new things?"
+                ];
+            } else {
+                // Generic questions
+                questions = [
+                    "How would you rate your confidence in this area?",
+                    "How important is this topic to you?",
+                    "How experienced are you with this subject?",
+                    "How comfortable do you feel discussing this?",
+                    "How likely are you to seek more information?",
+                    "How well do you understand the concepts?",
+                    "How often do you apply these principles?",
+                    "How motivated are you to improve in this area?",
+                    "How relevant is this to your current role?",
+                    "How prepared do you feel to take action?"
+                ];
+            }
+            
+            return questions.slice(0, questionCount);
+        }
+
+        // Generate assessment HTML
+        function generateAssessmentHTML(formData) {
+            const {
+                assessmentName,
+                assessmentDescription,
+                methodology,
+                questionCount,
+                answerType,
+                customQuestions,
+                customCategories,
+                includeName,
+                includeEmail,
+                includeCompany,
+                includeCell,
+                mobileCompatible,
+                wordpressCompatible,
+                logoLink,
+                actionLink,
+                backgroundColor,
+                fontColor,
+                headerColor,
+                showScore,
+                showPersonaInfo,
+                showCategory,
+                showActionButton,
+                actionText
+            } = formData;
+
+            // Generate questions
+            const questions = customQuestions.length > 0 ? 
+                customQuestions : 
+                generateDefaultQuestions(answerType, methodology, questionCount);
+
+            // Generate categories
+            const categories = customCategories.length > 0 ? 
+                customCategories : 
+                generateDefaultCategories(methodology, questionCount);
+
+            // Generate answer input HTML based on type
+            function generateAnswerInput(questionId, answerType) {
+                switch(answerType) {
+                    case 'yesno':
+                        return `
+                            <div class="answer-options">
+                                <label class="option-label">
+                                    <input type="radio" name="${questionId}" value="1" required>
+                                    <span>Yes</span>
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="${questionId}" value="0" required>
+                                    <span>No</span>
+                                </label>
+                            </div>`;
+                    
+                    case 'multiple':
+                        return `
+                            <div class="answer-options">
+                                <label class="option-label">
+                                    <input type="radio" name="${questionId}" value="4" required>
+                                    <span>Strongly Agree</span>
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="${questionId}" value="3" required>
+                                    <span>Agree</span>
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="${questionId}" value="2" required>
+                                    <span>Neutral</span>
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="${questionId}" value="1" required>
+                                    <span>Disagree</span>
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="${questionId}" value="0" required>
+                                    <span>Strongly Disagree</span>
+                                </label>
+                            </div>`;
+                    
+                    case 'scale':
+                        return `
+                            <div class="slider-container">
+                                <input type="range" min="1" max="5" value="3" class="slider" id="${questionId}" name="${questionId}" required>
+                                <div class="slider-labels">
+                                    <span>Strongly Disagree</span>
+                                    <span>Strongly Agree</span>
+                                </div>
+                                <div class="slider-value" id="${questionId}-value">3</div>
+                            </div>`;
+                    
+                    case 'input':
+                        return `
+                            <textarea name="${questionId}" placeholder="Please provide your answer..." required></textarea>`;
+                    
+                    default:
+                        return generateAnswerInput(questionId, 'scale');
+                }
+            }
+
+            // Generate category scoring logic
+            function generateScoringLogic(categories, questionCount, answerType) {
+                const maxScore = answerType === 'yesno' ? questionCount : questionCount * 5;
+                const ranges = categories.length;
+                const rangeSize = Math.ceil(maxScore / ranges);
+                
+                let logic = 'function getCategory(score) {\n';
+                
+                categories.forEach((category, index) => {
+                    const minScore = index * rangeSize;
+                    const maxScoreForCategory = index === categories.length - 1 ? maxScore : (index + 1) * rangeSize - 1;
+                    
+                    if (index === 0) {
+                        logic += `    if (score >= ${maxScore - rangeSize + 1}) return '${category.name}';\n`;
+                    } else if (index === categories.length - 1) {
+                        logic += `    return '${category.name}';\n`;
+                    } else {
+                        const threshold = maxScore - (index * rangeSize);
+                        logic += `    if (score >= ${threshold}) return '${category.name}';\n`;
+                    }
+                });
+                
+                logic += '}';
+                return logic;
+            }
+
+            // Build the complete HTML
+            return `<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>${assessmentName}</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: ${backgroundColor};
+            color: ${fontColor};
+            line-height: 1.6;
+            padding: 10px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: ${headerColor};
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+
+        ${logoLink ? `
+        .logo {
+            max-width: 80px;
+            height: auto;
+            margin-bottom: 15px;
+        }` : ''}
+
+        .header h1 {
+            font-size: 2rem;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .content {
+            padding: 30px;
+            background: ${backgroundColor};
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: ${fontColor};
+        }
+
+        .form-group input[type="text"],
+        .form-group input[type="email"],
+        .form-group input[type="tel"],
+        .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 6px;
+            font-size: 16px;
+            transition: border
