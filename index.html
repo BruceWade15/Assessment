@@ -10,339 +10,176 @@
             padding: 0;
             box-sizing: border-box;
         }
-
+        
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            padding: 20px;
-            color: #333;
+            font-family: Arial, sans-serif;
+            background-color: #e8e8e8;
+            color: #000;
+            line-height: 1.6;
+            padding: 10px;
         }
-
+        
         .container {
-            max-width: 900px;
+            max-width: 800px;
             margin: 0 auto;
-            background: white;
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            background: #f5f5f5;
+            border-radius: 10px;
             overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
         }
-
+        
         .header {
-            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            background: linear-gradient(135deg, #1e3a8a, #3b4d7a);
             color: white;
-            padding: 30px;
+            padding: 20px;
             text-align: center;
         }
-
-        .header h1 {
-            font-size: 2.5rem;
+        
+        .header img {
+            max-height: 50px;
             margin-bottom: 10px;
-            font-weight: 700;
         }
-
-        .header p {
-            font-size: 1.2rem;
-            opacity: 0.9;
+        
+        .header h1 {
+            font-size: 24px;
+            margin: 0;
         }
-
+        
         .form-container {
-            padding: 40px;
+            padding: 20px;
         }
-
-        .section {
-            margin-bottom: 40px;
-            border: 2px solid #f0f0f0;
-            border-radius: 10px;
-            padding: 25px;
-            transition: border-color 0.3s;
-        }
-
-        .section:hover {
-            border-color: #4facfe;
-        }
-
-        .section h2 {
-            color: #4facfe;
-            margin-bottom: 20px;
-            font-size: 1.4rem;
-            display: flex;
-            align-items: center;
-        }
-
-        .section h2::before {
-            content: '';
-            width: 4px;
-            height: 20px;
-            background: #4facfe;
-            margin-right: 10px;
-            border-radius: 2px;
-        }
-
+        
         .form-group {
             margin-bottom: 20px;
         }
-
+        
         .form-group label {
             display: block;
-            margin-bottom: 8px;
-            font-weight: 600;
-            color: #555;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #333;
         }
-
-        .form-group input,
-        .form-group select,
-        .form-group textarea {
+        
+        .form-group input[type="text"],
+        .form-group input[type="number"],
+        .form-group input[type="url"],
+        .form-group input[type="color"],
+        .form-group textarea,
+        .form-group select {
             width: 100%;
-            padding: 12px;
-            border: 2px solid #e1e1e1;
-            border-radius: 8px;
-            font-size: 16px;
-            transition: border-color 0.3s, box-shadow 0.3s;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
         }
-
-        .form-group input:focus,
-        .form-group select:focus,
-        .form-group textarea:focus {
-            outline: none;
-            border-color: #4facfe;
-            box-shadow: 0 0 0 3px rgba(79, 172, 254, 0.1);
-        }
-
+        
         .form-group textarea {
-            height: 100px;
+            height: 80px;
             resize: vertical;
         }
-
+        
         .checkbox-group {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            display: flex;
+            flex-wrap: wrap;
             gap: 15px;
             margin-top: 10px;
         }
-
+        
         .checkbox-item {
             display: flex;
             align-items: center;
-            padding: 10px;
-            border: 1px solid #e1e1e1;
-            border-radius: 6px;
-            transition: all 0.3s;
+            gap: 8px;
         }
-
-        .checkbox-item:hover {
-            background: #f8f9ff;
-            border-color: #4facfe;
-        }
-
+        
         .checkbox-item input[type="checkbox"] {
             width: auto;
-            margin-right: 10px;
-            transform: scale(1.2);
         }
-
-        .color-input {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .color-input input[type="color"] {
-            width: 50px;
-            height: 40px;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-        }
-
-        .color-input input[type="text"] {
-            flex: 1;
-        }
-
-        .btn-primary {
-            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        
+        .section-title {
+            background: #1e3a8a;
             color: white;
-            padding: 15px 30px;
-            border: none;
-            border-radius: 8px;
-            font-size: 1.1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: transform 0.2s, box-shadow 0.3s;
-            width: 100%;
-            margin-top: 20px;
+            padding: 10px 15px;
+            margin: 20px -20px 15px -20px;
+            font-weight: bold;
+            font-size: 16px;
         }
-
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(79, 172, 254, 0.4);
-        }
-
-        .btn-primary:active {
-            transform: translateY(0);
-        }
-
-        .output-section {
-            display: none;
-            background: #f8f9ff;
-            border: 2px solid #4facfe;
-            border-radius: 10px;
-            padding: 25px;
+        
+        .btn-group {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
             margin-top: 30px;
         }
-
-        .output-section h3 {
-            color: #4facfe;
-            margin-bottom: 15px;
-            font-size: 1.3rem;
+        
+        .btn {
+            background: #1e3a8a;
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            flex: 1;
+            min-width: 150px;
         }
-
-        .code-output {
-            background: #1e1e1e;
-            color: #f8f8f2;
+        
+        .btn:hover {
+            background: #2563eb;
+        }
+        
+        .output-container {
+            margin-top: 30px;
             padding: 20px;
-            border-radius: 8px;
+            background: #fff;
+            border: 2px solid #1e3a8a;
+            border-radius: 5px;
+            display: none;
+        }
+        
+        .output-header {
+            background: #1e3a8a;
+            color: white;
+            padding: 10px 15px;
+            margin: -20px -20px 15px -20px;
+            font-weight: bold;
+        }
+        
+        #generatedCode {
+            width: 100%;
+            height: 400px;
             font-family: 'Courier New', monospace;
-            font-size: 14px;
-            line-height: 1.4;
-            max-height: 500px;
-            overflow-y: auto;
-            white-space: pre-wrap;
-            word-wrap: break-word;
-        }
-
-        .copy-btn {
-            background: #28a745;
-            color: white;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-            margin-top: 10px;
-            font-weight: 600;
-        }
-
-        .copy-btn:hover {
-            background: #218838;
-        }
-
-        .questions-container {
-            border: 1px solid #e1e1e1;
-            border-radius: 8px;
-            padding: 15px;
-            margin-top: 10px;
-            background: #f9f9f9;
-        }
-
-        .question-item {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            margin-bottom: 10px;
-            padding: 10px;
-            background: white;
-            border-radius: 6px;
-            border: 1px solid #e1e1e1;
-        }
-
-        .question-item input {
-            flex: 1;
-            border: 1px solid #ddd;
-            padding: 8px;
-        }
-
-        .remove-question {
-            background: #dc3545;
-            color: white;
-            border: none;
-            padding: 5px 10px;
-            border-radius: 4px;
-            cursor: pointer;
             font-size: 12px;
-        }
-
-        .add-question {
-            background: #28a745;
-            color: white;
-            border: none;
-            padding: 8px 15px;
-            border-radius: 6px;
-            cursor: pointer;
-            margin-top: 10px;
-        }
-
-        .categories-container {
-            border: 1px solid #e1e1e1;
-            border-radius: 8px;
-            padding: 15px;
-            margin-top: 10px;
-            background: #f9f9f9;
-        }
-
-        .category-item {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            margin-bottom: 10px;
+            border: 1px solid #ddd;
             padding: 10px;
-            background: white;
-            border-radius: 6px;
-            border: 1px solid #e1e1e1;
+            background: #f8f9fa;
+            resize: vertical;
         }
-
-        .category-item input {
-            padding: 8px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
+        
+        .copy-btn {
+            background: #059669;
+            margin-top: 10px;
         }
-
-        .category-item input:first-child {
-            flex: 1;
+        
+        .copy-btn:hover {
+            background: #047857;
         }
-
-        .category-item textarea {
-            flex: 2;
-            min-height: 60px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            padding: 8px;
-        }
-
-        @media (max-width: 768px) {
-            body {
-                padding: 10px;
-            }
-
-            .header {
-                padding: 20px;
-            }
-
-            .header h1 {
-                font-size: 2rem;
-            }
-
-            .form-container {
-                padding: 20px;
-            }
-
-            .section {
-                padding: 15px;
-            }
-
+        
+        @media (max-width: 600px) {
             .checkbox-group {
-                grid-template-columns: 1fr;
-            }
-
-            .question-item,
-            .category-item {
                 flex-direction: column;
-                align-items: stretch;
             }
-
-            .question-item input,
-            .category-item input,
-            .category-item textarea {
-                width: 100%;
+            
+            .btn-group {
+                flex-direction: column;
+            }
+            
+            .btn {
+                min-width: auto;
+            }
+            
+            .header h1 {
+                font-size: 20px;
             }
         }
     </style>
@@ -350,550 +187,360 @@
 <body>
     <div class="container">
         <div class="header">
-            <h1>🚀 Assessment Developer</h1>
-            <p>Create professional assessments with custom HTML code generation</p>
+            <img src="https://brucewade.co.za/wp-content/uploads/2025/07/bat-3.png" alt="Logo">
+            <h1>Assessment Developer Application</h1>
         </div>
-
+        
         <div class="form-container">
             <form id="assessmentForm">
-                <!-- Basic Information -->
-                <div class="section">
-                    <h2>📋 Basic Information</h2>
-                    
-                    <div class="form-group">
-                        <label for="assessmentName">Assessment Name *</label>
-                        <input type="text" id="assessmentName" required placeholder="e.g., Leadership Style Assessment">
+                <div class="form-group">
+                    <label for="assessmentName">1. Name of the assessment:</label>
+                    <input type="text" id="assessmentName" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="assessmentDescription">2. Brief description of what is to be assessed:</label>
+                    <textarea id="assessmentDescription" required></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label for="methodology">3. Is this based on a current published methodology:</label>
+                    <input type="text" id="methodology" placeholder="Enter methodology name or 'No'">
+                </div>
+                
+                <div class="form-group">
+                    <label for="numQuestions">4. Number of questions:</label>
+                    <input type="number" id="numQuestions" min="1" max="100" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="answerType">5. Type of answers required:</label>
+                    <select id="answerType" required>
+                        <option value="">Select answer type</option>
+                        <option value="yesno">Yes/No</option>
+                        <option value="multiple">Multiple choice</option>
+                        <option value="scale">Sliding scale 1 to 5</option>
+                        <option value="input">Input fields</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="resultCategories">6. Different types of result categories (comma separated, leave blank to auto-derive):</label>
+                    <input type="text" id="resultCategories" placeholder="e.g., Excellent, Good, Average, Needs Improvement">
+                </div>
+                
+                <div class="section-title">7. User Input Fields to Include</div>
+                <div class="checkbox-group">
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="includeName">
+                        <label for="includeName">Name</label>
                     </div>
-
-                    <div class="form-group">
-                        <label for="assessmentDescription">Brief Description *</label>
-                        <textarea id="assessmentDescription" required placeholder="Describe what this assessment measures..."></textarea>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="includeEmail">
+                        <label for="includeEmail">Email</label>
                     </div>
-
-                    <div class="form-group">
-                        <label for="methodology">Based on Published Methodology?</label>
-                        <input type="text" id="methodology" placeholder="e.g., Myers-Briggs, DISC, or leave blank if custom">
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="includeCompany">
+                        <label for="includeCompany">Company</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="includeCell">
+                        <label for="includeCell">Cell</label>
                     </div>
                 </div>
-
-                <!-- Questions Configuration -->
-                <div class="section">
-                    <h2>❓ Questions Configuration</h2>
-                    
-                    <div class="form-group">
-                        <label for="questionCount">Number of Questions *</label>
-                        <input type="number" id="questionCount" min="1" max="50" value="8" required>
+                
+                <div class="section-title">8. Compatibility Requirements</div>
+                <div class="checkbox-group">
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="mobileCompatible" checked>
+                        <label for="mobileCompatible">Mobile phone compatible</label>
                     </div>
-
-                    <div class="form-group">
-                        <label for="answerType">Answer Type *</label>
-                        <select id="answerType" required>
-                            <option value="">Select answer type...</option>
-                            <option value="yesno">Yes/No</option>
-                            <option value="multiple">Multiple Choice</option>
-                            <option value="scale">Sliding Scale (1-5)</option>
-                            <option value="input">Input Fields</option>
-                        </select>
-                    </div>
-
-                    <div class="form-group">
-                        <label>Custom Questions (optional - will generate default if left blank)</label>
-                        <div class="questions-container" id="questionsContainer">
-                            <!-- Questions will be added dynamically -->
-                        </div>
-                        <button type="button" class="add-question" onclick="addQuestion()">+ Add Question</button>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="wordpressCompatible" checked>
+                        <label for="wordpressCompatible">WordPress compatible</label>
                     </div>
                 </div>
-
-                <!-- Result Categories -->
-                <div class="section">
-                    <h2>🎯 Result Categories</h2>
-                    
-                    <div class="form-group">
-                        <label>Categories (leave blank to auto-generate based on methodology)</label>
-                        <div class="categories-container" id="categoriesContainer">
-                            <!-- Categories will be added dynamically -->
-                        </div>
-                        <button type="button" class="add-question" onclick="addCategory()">+ Add Category</button>
+                
+                <div class="section-title">9. Design Settings</div>
+                <div class="form-group">
+                    <label for="logoLink">Link to logo:</label>
+                    <input type="url" id="logoLink" placeholder="https://example.com/logo.png">
+                </div>
+                
+                <div class="form-group">
+                    <label for="actionButtonLink">Action button link:</label>
+                    <input type="url" id="actionButtonLink" placeholder="https://example.com/action">
+                </div>
+                
+                <div class="form-group">
+                    <label for="backgroundColor">Background colour:</label>
+                    <input type="color" id="backgroundColor" value="#f5f5f5">
+                </div>
+                
+                <div class="form-group">
+                    <label for="fontColor">Font colour:</label>
+                    <input type="color" id="fontColor" value="#000000">
+                </div>
+                
+                <div class="form-group">
+                    <label for="headingButtonColor">Heading and button background colour:</label>
+                    <input type="color" id="headingButtonColor" value="#1e3a8a">
+                </div>
+                
+                <div class="section-title">10. Results Screen Options</div>
+                <div class="checkbox-group">
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="showScore" checked>
+                        <label for="showScore">Show resultant score</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="displayPersonaInfo" checked>
+                        <label for="displayPersonaInfo">Display persona name and company</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="displayResultCategory" checked>
+                        <label for="displayResultCategory">Display result category and description</label>
                     </div>
                 </div>
-
-                <!-- User Input Fields -->
-                <div class="section">
-                    <h2>👤 User Input Fields</h2>
-                    
-                    <div class="checkbox-group">
-                        <div class="checkbox-item">
-                            <input type="checkbox" id="includeName" checked>
-                            <label for="includeName">Include Name Field</label>
-                        </div>
-                        <div class="checkbox-item">
-                            <input type="checkbox" id="includeEmail" checked>
-                            <label for="includeEmail">Include Email Field</label>
-                        </div>
-                        <div class="checkbox-item">
-                            <input type="checkbox" id="includeCompany">
-                            <label for="includeCompany">Include Company Field</label>
-                        </div>
-                        <div class="checkbox-item">
-                            <input type="checkbox" id="includeCell">
-                            <label for="includeCell">Include Cell/Phone Field</label>
-                        </div>
-                    </div>
+                
+                <div class="form-group">
+                    <label for="actionText">Action text for button:</label>
+                    <input type="text" id="actionText" placeholder="Get Your Personalized Report" value="Learn More">
                 </div>
-
-                <!-- Technical Requirements -->
-                <div class="section">
-                    <h2>⚙️ Technical Requirements</h2>
-                    
-                    <div class="checkbox-group">
-                        <div class="checkbox-item">
-                            <input type="checkbox" id="mobileCompatible" checked>
-                            <label for="mobileCompatible">Mobile Phone Compatible</label>
-                        </div>
-                        <div class="checkbox-item">
-                            <input type="checkbox" id="wordpressCompatible" checked>
-                            <label for="wordpressCompatible">WordPress Compatible</label>
-                        </div>
-                    </div>
+                
+                <div class="btn-group">
+                    <button type="submit" class="btn">Generate Claude Prompt</button>
+                    <button type="button" class="btn" onclick="clearForm()">Clear Form</button>
                 </div>
-
-                <!-- Design Settings -->
-                <div class="section">
-                    <h2>🎨 Design Settings</h2>
-                    
-                    <div class="form-group">
-                        <label for="logoLink">Logo URL</label>
-                        <input type="url" id="logoLink" placeholder="https://example.com/logo.png">
-                    </div>
-
-                    <div class="form-group">
-                        <label for="actionLink">Action Button Link</label>
-                        <input type="url" id="actionLink" placeholder="https://example.com/contact">
-                    </div>
-
-                    <div class="form-group">
-                        <label for="backgroundColor">Background Color</label>
-                        <div class="color-input">
-                            <input type="color" id="backgroundColorPicker" value="#f5f5f5">
-                            <input type="text" id="backgroundColor" value="#f5f5f5">
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="fontColor">Font Color</label>
-                        <div class="color-input">
-                            <input type="color" id="fontColorPicker" value="#333333">
-                            <input type="text" id="fontColor" value="#333333">
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="headerColor">Header & Button Color</label>
-                        <div class="color-input">
-                            <input type="color" id="headerColorPicker" value="#1e3a8a">
-                            <input type="text" id="headerColor" value="#1e3a8a">
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Results Configuration -->
-                <div class="section">
-                    <h2>📊 Results Configuration</h2>
-                    
-                    <div class="checkbox-group">
-                        <div class="checkbox-item">
-                            <input type="checkbox" id="showScore">
-                            <label for="showScore">Show Resultant Score</label>
-                        </div>
-                        <div class="checkbox-item">
-                            <input type="checkbox" id="showPersonaInfo" checked>
-                            <label for="showPersonaInfo">Display Name & Company</label>
-                        </div>
-                        <div class="checkbox-item">
-                            <input type="checkbox" id="showCategory" checked>
-                            <label for="showCategory">Show Result Category</label>
-                        </div>
-                        <div class="checkbox-item">
-                            <input type="checkbox" id="showActionButton" checked>
-                            <label for="showActionButton">Include Action Button</label>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="actionText">Action Button Text</label>
-                        <input type="text" id="actionText" value="Get Started Today" placeholder="e.g., Contact Us, Learn More">
-                    </div>
-                </div>
-
-                <button type="submit" class="btn-primary">🚀 Generate Assessment Code</button>
             </form>
-
-            <div class="output-section" id="outputSection">
-                <h3>📝 Generated HTML Code</h3>
-                <button class="copy-btn" onclick="copyCode()">📋 Copy to Clipboard</button>
-                <div class="code-output" id="codeOutput"></div>
+            
+            <div class="output-container" id="outputContainer">
+                <div class="output-header">Generated Claude Prompt - Copy and Paste to Claude</div>
+                <textarea id="generatedCode" readonly></textarea>
+                <button class="btn copy-btn" onclick="copyCode()">Copy Prompt to Clipboard</button>
             </div>
         </div>
     </div>
-
+    
     <script>
-        // Color picker synchronization
-        function syncColorPickers() {
-            const colorPairs = [
-                ['backgroundColorPicker', 'backgroundColor'],
-                ['fontColorPicker', 'fontColor'],
-                ['headerColorPicker', 'headerColor']
-            ];
-
-            colorPairs.forEach(([picker, input]) => {
-                document.getElementById(picker).addEventListener('input', (e) => {
-                    document.getElementById(input).value = e.target.value;
-                });
-
-                document.getElementById(input).addEventListener('input', (e) => {
-                    if (/^#[0-9A-F]{6}$/i.test(e.target.value)) {
-                        document.getElementById(picker).value = e.target.value;
-                    }
-                });
-            });
-        }
-
-        // Add question functionality
-        function addQuestion() {
-            const container = document.getElementById('questionsContainer');
-            const questionCount = container.children.length + 1;
+        document.getElementById('assessmentForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            generateAssessmentCode();
+        });
+        
+        function generateAssessmentCode() {
+            // Get form values
+            const assessmentName = document.getElementById('assessmentName').value;
+            const assessmentDescription = document.getElementById('assessmentDescription').value;
+            const methodology = document.getElementById('methodology').value;
+            const numQuestions = parseInt(document.getElementById('numQuestions').value);
+            const answerType = document.getElementById('answerType').value;
+            const resultCategories = document.getElementById('resultCategories').value;
             
-            const questionDiv = document.createElement('div');
-            questionDiv.className = 'question-item';
-            questionDiv.innerHTML = `
-                <input type="text" placeholder="Question ${questionCount}" name="customQuestion">
-                <button type="button" class="remove-question" onclick="removeQuestion(this)">Remove</button>
-            `;
+            const includeName = document.getElementById('includeName').checked;
+            const includeEmail = document.getElementById('includeEmail').checked;
+            const includeCompany = document.getElementById('includeCompany').checked;
+            const includeCell = document.getElementById('includeCell').checked;
             
-            container.appendChild(questionDiv);
-        }
-
-        function removeQuestion(button) {
-            button.parentElement.remove();
-            updateQuestionNumbers();
-        }
-
-        function updateQuestionNumbers() {
-            const questions = document.querySelectorAll('#questionsContainer input');
-            questions.forEach((input, index) => {
-                input.placeholder = `Question ${index + 1}`;
-            });
-        }
-
-        // Add category functionality
-        function addCategory() {
-            const container = document.getElementById('categoriesContainer');
+            const mobileCompatible = document.getElementById('mobileCompatible').checked;
+            const wordpressCompatible = document.getElementById('wordpressCompatible').checked;
             
-            const categoryDiv = document.createElement('div');
-            categoryDiv.className = 'category-item';
-            categoryDiv.innerHTML = `
-                <input type="text" placeholder="Category Name" name="categoryName">
-                <textarea placeholder="Category Description" name="categoryDescription"></textarea>
-                <button type="button" class="remove-question" onclick="removeCategory(this)">Remove</button>
-            `;
+            const logoLink = document.getElementById('logoLink').value;
+            const actionButtonLink = document.getElementById('actionButtonLink').value;
+            const backgroundColor = document.getElementById('backgroundColor').value;
+            const fontColor = document.getElementById('fontColor').value;
+            const headingButtonColor = document.getElementById('headingButtonColor').value;
             
-            container.appendChild(categoryDiv);
-        }
-
-        function removeCategory(button) {
-            button.parentElement.remove();
-        }
-
-        // Generate default categories based on methodology
-        function generateDefaultCategories(methodology, questionCount) {
-            if (!methodology) {
-                // Generic categories based on score ranges
-                const ranges = Math.ceil(questionCount / 3);
-                return [
-                    { name: 'High Level', description: 'You demonstrate strong capabilities in this area.' },
-                    { name: 'Moderate Level', description: 'You show good potential with room for development.' },
-                    { name: 'Developing Level', description: 'This is an area where focused development could benefit you.' }
-                ];
-            }
-
-            const methodologyLower = methodology.toLowerCase();
+            const showScore = document.getElementById('showScore').checked;
+            const displayPersonaInfo = document.getElementById('displayPersonaInfo').checked;
+            const displayResultCategory = document.getElementById('displayResultCategory').checked;
+            const actionText = document.getElementById('actionText').value;
             
-            if (methodologyLower.includes('leadership')) {
-                return [
-                    { name: 'Transformational Leader', description: 'You inspire and motivate others through vision and personal example.' },
-                    { name: 'Transactional Leader', description: 'You lead through structure, rewards, and clear expectations.' },
-                    { name: 'Servant Leader', description: 'You lead by serving others and putting their needs first.' },
-                    { name: 'Emerging Leader', description: 'You show leadership potential and are developing your style.' }
-                ];
-            } else if (methodologyLower.includes('personality') || methodologyLower.includes('disc')) {
-                return [
-                    { name: 'Dominant', description: 'You are direct, results-focused, and confident in your approach.' },
-                    { name: 'Influential', description: 'You are enthusiastic, persuasive, and people-oriented.' },
-                    { name: 'Steady', description: 'You are patient, reliable, and prefer stability and cooperation.' },
-                    { name: 'Conscientious', description: 'You are analytical, detail-oriented, and quality-focused.' }
-                ];
+            // Generate categories if not provided
+            let categories = [];
+            if (resultCategories.trim()) {
+                categories = resultCategories.split(',').map(c => c.trim());
             } else {
-                return [
-                    { name: 'Advanced', description: 'You demonstrate advanced skills and understanding in this area.' },
-                    { name: 'Proficient', description: 'You show solid competence with consistent performance.' },
-                    { name: 'Developing', description: 'You are building skills and showing good progress.' },
-                    { name: 'Beginning', description: 'This is a growth area with significant development opportunities.' }
-                ];
-            }
-        }
-
-        // Generate default questions based on answer type and methodology
-        function generateDefaultQuestions(answerType, methodology, questionCount) {
-            let questions = [];
-            
-            if (methodology && methodology.toLowerCase().includes('leadership')) {
-                questions = [
-                    "How do you typically approach decision-making?",
-                    "What motivates you most when leading others?",
-                    "How do you handle conflict within your team?",
-                    "What's your preferred communication style?",
-                    "How do you respond to change and uncertainty?",
-                    "What role does feedback play in your leadership?",
-                    "How do you develop others on your team?",
-                    "What drives your leadership philosophy?",
-                    "How do you build trust with your team?",
-                    "What's your approach to setting goals?"
-                ];
-            } else if (methodology && methodology.toLowerCase().includes('innovation')) {
-                questions = [
-                    "How quickly do you adopt new technologies?",
-                    "How do you respond to change in your environment?",
-                    "What's your approach to starting new projects?",
-                    "How comfortable are you with uncertainty?",
-                    "How do you stay informed about trends?",
-                    "How much do you rely on others' opinions?",
-                    "How do you feel about being first to try something?",
-                    "How do you view failure when trying new things?"
-                ];
-            } else {
-                // Generic questions
-                questions = [
-                    "How would you rate your confidence in this area?",
-                    "How important is this topic to you?",
-                    "How experienced are you with this subject?",
-                    "How comfortable do you feel discussing this?",
-                    "How likely are you to seek more information?",
-                    "How well do you understand the concepts?",
-                    "How often do you apply these principles?",
-                    "How motivated are you to improve in this area?",
-                    "How relevant is this to your current role?",
-                    "How prepared do you feel to take action?"
-                ];
+                categories = generateDefaultCategories(answerType);
             }
             
-            return questions.slice(0, questionCount);
+            // Generate the Claude prompt
+            const claudePrompt = generateHTMLCode({
+                assessmentName, assessmentDescription, methodology, numQuestions, answerType,
+                categories, includeName, includeEmail, includeCompany, includeCell,
+                mobileCompatible, wordpressCompatible, logoLink, actionButtonLink,
+                backgroundColor, fontColor, headingButtonColor, showScore,
+                displayPersonaInfo, displayResultCategory, actionText
+            });
+            
+            // Display the prompt
+            document.getElementById('generatedCode').value = claudePrompt;
+            document.getElementById('outputContainer').style.display = 'block';
+            document.getElementById('outputContainer').scrollIntoView({ behavior: 'smooth' });
         }
-
-        // Generate assessment HTML
-        function generateAssessmentHTML(formData) {
-            const {
-                assessmentName,
-                assessmentDescription,
-                methodology,
-                questionCount,
-                answerType,
-                customQuestions,
-                customCategories,
-                includeName,
-                includeEmail,
-                includeCompany,
-                includeCell,
-                mobileCompatible,
-                wordpressCompatible,
-                logoLink,
-                actionLink,
-                backgroundColor,
-                fontColor,
-                headerColor,
-                showScore,
-                showPersonaInfo,
-                showCategory,
-                showActionButton,
-                actionText
-            } = formData;
-
-            // Generate questions
-            const questions = customQuestions.length > 0 ? 
-                customQuestions : 
-                generateDefaultQuestions(answerType, methodology, questionCount);
-
-            // Generate categories
-            const categories = customCategories.length > 0 ? 
-                customCategories : 
-                generateDefaultCategories(methodology, questionCount);
-
-            // Generate answer input HTML based on type
-            function generateAnswerInput(questionId, answerType) {
-                switch(answerType) {
-                    case 'yesno':
-                        return `
-                            <div class="answer-options">
-                                <label class="option-label">
-                                    <input type="radio" name="${questionId}" value="1" required>
-                                    <span>Yes</span>
-                                </label>
-                                <label class="option-label">
-                                    <input type="radio" name="${questionId}" value="0" required>
-                                    <span>No</span>
-                                </label>
-                            </div>`;
-                    
-                    case 'multiple':
-                        return `
-                            <div class="answer-options">
-                                <label class="option-label">
-                                    <input type="radio" name="${questionId}" value="4" required>
-                                    <span>Strongly Agree</span>
-                                </label>
-                                <label class="option-label">
-                                    <input type="radio" name="${questionId}" value="3" required>
-                                    <span>Agree</span>
-                                </label>
-                                <label class="option-label">
-                                    <input type="radio" name="${questionId}" value="2" required>
-                                    <span>Neutral</span>
-                                </label>
-                                <label class="option-label">
-                                    <input type="radio" name="${questionId}" value="1" required>
-                                    <span>Disagree</span>
-                                </label>
-                                <label class="option-label">
-                                    <input type="radio" name="${questionId}" value="0" required>
-                                    <span>Strongly Disagree</span>
-                                </label>
-                            </div>`;
-                    
-                    case 'scale':
-                        return `
-                            <div class="slider-container">
-                                <input type="range" min="1" max="5" value="3" class="slider" id="${questionId}" name="${questionId}" required>
-                                <div class="slider-labels">
-                                    <span>Strongly Disagree</span>
-                                    <span>Strongly Agree</span>
-                                </div>
-                                <div class="slider-value" id="${questionId}-value">3</div>
-                            </div>`;
-                    
-                    case 'input':
-                        return `
-                            <textarea name="${questionId}" placeholder="Please provide your answer..." required></textarea>`;
-                    
-                    default:
-                        return generateAnswerInput(questionId, 'scale');
-                }
+        
+        function generateDefaultCategories(answerType) {
+            switch(answerType) {
+                case 'yesno':
+                case 'multiple':
+                    return ['Excellent', 'Good', 'Average', 'Needs Improvement'];
+                case 'scale':
+                    return ['Outstanding', 'Very Good', 'Good', 'Fair', 'Poor'];
+                case 'input':
+                    return ['High Performance', 'Good Performance', 'Average Performance', 'Below Average'];
+                default:
+                    return ['Level 4', 'Level 3', 'Level 2', 'Level 1'];
             }
+        }
+        
+        function generateHTMLCode(config) {
+            // Create comprehensive prompt for Claude
+            const prompt = `Create a professional HTML assessment application with the following specifications:
 
-            // Generate category scoring logic
-            function generateScoringLogic(categories, questionCount, answerType) {
-                const maxScore = answerType === 'yesno' ? questionCount : questionCount * 5;
-                const ranges = categories.length;
-                const rangeSize = Math.ceil(maxScore / ranges);
-                
-                let logic = 'function getCategory(score) {\n';
-                
-                categories.forEach((category, index) => {
-                    const minScore = index * rangeSize;
-                    const maxScoreForCategory = index === categories.length - 1 ? maxScore : (index + 1) * rangeSize - 1;
-                    
-                    if (index === 0) {
-                        logic += `    if (score >= ${maxScore - rangeSize + 1}) return '${category.name}';\n`;
-                    } else if (index === categories.length - 1) {
-                        logic += `    return '${category.name}';\n`;
-                    } else {
-                        const threshold = maxScore - (index * rangeSize);
-                        logic += `    if (score >= ${threshold}) return '${category.name}';\n`;
-                    }
-                });
-                
-                logic += '}';
-                return logic;
+**Assessment Details:**
+- Name: "${config.assessmentName}"
+- Description: "${config.assessmentDescription}"
+${config.methodology && config.methodology.toLowerCase() !== 'no' ? `- Based on methodology: "${config.methodology}"` : '- Not based on a specific methodology'}
+- Number of questions: ${config.numQuestions}
+- Answer type: ${getAnswerTypeDescription(config.answerType)}
+- Result categories: ${config.categories.join(', ')}
+
+**User Information Fields to Include:**
+${config.includeName ? '- Name (required)' : ''}
+${config.includeEmail ? '- Email (required)' : ''}
+${config.includeCompany ? '- Company (optional)' : ''}
+${config.includeCell ? '- Phone number (optional)' : ''}
+
+**Technical Requirements:**
+${config.mobileCompatible ? '- Mobile phone compatible (responsive design)' : ''}
+${config.wordpressCompatible ? '- WordPress compatible' : ''}
+
+**Design Specifications:**
+${config.logoLink ? `- Logo URL: ${config.logoLink}` : '- No logo specified'}
+- Background color: ${config.backgroundColor}
+- Font color: ${config.fontColor}
+- Heading and button color: ${config.headingButtonColor}
+${config.actionButtonLink ? `- Action button link: ${config.actionButtonLink}` : '- No action button link specified'}
+- Action button text: "${config.actionText}"
+
+**Results Screen Requirements:**
+${config.showScore ? '- Display the calculated score percentage' : '- Do not display score'}
+${config.displayPersonaInfo ? '- Display user name and company information' : '- Do not display personal information'}
+${config.displayResultCategory ? '- Display result category and description' : '- Do not display category information'}
+
+**Specific Instructions:**
+1. Create a complete HTML file with embedded CSS and JavaScript
+2. Include placeholder text for all ${config.numQuestions} questions (e.g., "Enter your question 1 text here")
+3. Implement proper scoring logic based on the answer type selected
+4. Create responsive design that works on mobile devices
+5. Include proper form validation
+6. Add smooth scrolling to results section
+7. Style the application professionally with the specified colors
+8. Generate realistic category descriptions for each result level
+9. Make the code production-ready and deployable
+${config.answerType === 'scale' ? '10. For sliding scale questions, use range inputs from 1-5' : ''}
+${config.answerType === 'multiple' ? '10. For multiple choice, provide 4 options (A, B, C, D) per question' : ''}
+${config.answerType === 'yesno' ? '10. For Yes/No questions, provide radio button options' : ''}
+${config.answerType === 'input' ? '10. For input fields, use text input boxes with proper validation' : ''}
+
+**Additional Notes:**
+- Ensure all styling is contained within the HTML file
+- Use modern CSS techniques for better visual appeal
+- Include hover effects and smooth transitions
+- Make the scoring algorithm fair and logical
+- Provide meaningful feedback in the results section
+- Ensure accessibility with proper form labels and ARIA attributes
+
+Please create the complete HTML code that meets all these specifications.`;
+
+            return prompt;
+        }
+
+        function getAnswerTypeDescription(answerType) {
+            switch(answerType) {
+                case 'yesno': return 'Yes/No radio buttons';
+                case 'multiple': return 'Multiple choice with 4 options';
+                case 'scale': return 'Sliding scale from 1 to 5';
+                case 'input': return 'Text input fields';
+                default: return 'Text input fields';
             }
-
-            // Build the complete HTML
-            return `<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>${assessmentName}</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
         }
-
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: ${backgroundColor};
-            color: ${fontColor};
-            line-height: 1.6;
-            padding: 10px;
+        
+        function generateAnswerOptions(answerType, questionNum) {
+            switch(answerType) {
+                case 'yesno':
+                    return `                    <div class="answer-options">
+                        <label><input type="radio" name="q${questionNum}" value="1"> Yes</label>
+                        <label><input type="radio" name="q${questionNum}" value="0"> No</label>
+                    </div>`;
+                case 'multiple':
+                    return `                    <div class="answer-options">
+                        <label><input type="radio" name="q${questionNum}" value="4"> Option A</label>
+                        <label><input type="radio" name="q${questionNum}" value="3"> Option B</label>
+                        <label><input type="radio" name="q${questionNum}" value="2"> Option C</label>
+                        <label><input type="radio" name="q${questionNum}" value="1"> Option D</label>
+                    </div>`;
+                case 'scale':
+                    return `                    <div class="scale-container">
+                        <span>1</span>
+                        <input type="range" name="q${questionNum}" min="1" max="5" value="3">
+                        <span>5</span>
+                    </div>`;
+                case 'input':
+                    return `                    <input type="text" name="q${questionNum}" placeholder="Enter your answer" required>`;
+                default:
+                    return `                    <input type="text" name="q${questionNum}" placeholder="Enter your answer" required>`;
+            }
         }
-
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-            background: white;
-            border-radius: 10px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            overflow: hidden;
+        
+        function generateScoreCalculation(answerType, numQuestions) {
+            switch(answerType) {
+                case 'yesno':
+                    return `for (let i = 1; i <= totalQuestions; i++) {
+                let answer = document.querySelector('input[name="q' + i + '"]:checked');
+                if (answer) score += parseInt(answer.value) * 100 / totalQuestions;
+            }`;
+                case 'multiple':
+                    return `for (let i = 1; i <= totalQuestions; i++) {
+                let answer = document.querySelector('input[name="q' + i + '"]:checked');
+                if (answer) score += parseInt(answer.value) * 25;
+            }
+            score = Math.min(score, 100);`;
+                case 'scale':
+                    return `for (let i = 1; i <= totalQuestions; i++) {
+                let answer = document.querySelector('input[name="q' + i + '"]');
+                if (answer) score += parseInt(answer.value) * 20;
+            }
+            score = Math.min(score, 100);`;
+                case 'input':
+                    return `// For input fields, assign random score for demo
+            score = Math.floor(Math.random() * 100);`;
+                default:
+                    return `score = Math.floor(Math.random() * 100);`;
+            }
         }
-
-        .header {
-            background: ${headerColor};
-            color: white;
-            padding: 20px;
-            text-align: center;
+        
+        function clearForm() {
+            document.getElementById('assessmentForm').reset();
+            document.getElementById('outputContainer').style.display = 'none';
         }
-
-        ${logoLink ? `
-        .logo {
-            max-width: 80px;
-            height: auto;
-            margin-bottom: 15px;
-        }` : ''}
-
-        .header h1 {
-            font-size: 2rem;
-            margin-bottom: 10px;
-            font-weight: bold;
+        
+        function copyCode() {
+            const codeTextarea = document.getElementById('generatedCode');
+            codeTextarea.select();
+            codeTextarea.setSelectionRange(0, 99999);
+            document.execCommand('copy');
+            
+            const btn = event.target;
+            const originalText = btn.textContent;
+            btn.textContent = 'Copied!';
+            btn.style.background = '#059669';
+            
+            setTimeout(() => {
+                btn.textContent = originalText;
+                btn.style.background = '#047857';
+            }, 2000);
         }
-
-        .header p {
-            font-size: 1.1rem;
-            opacity: 0.9;
-        }
-
-        .content {
-            padding: 30px;
-            background: ${backgroundColor};
-        }
-
-        .form-group {
-            margin-bottom: 25px;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 600;
-            color: ${fontColor};
-        }
-
-        .form-group input[type="text"],
-        .form-group input[type="email"],
-        .form-group input[type="tel"],
-        .form-group textarea {
-            width: 100%;
-            padding: 12px;
-            border: 2px solid #ddd;
-            border-radius: 6px;
-            font-size: 16px;
-            transition: border
+    </script>
+</body>
+</html>
