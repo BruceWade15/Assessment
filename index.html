@@ -13,68 +13,72 @@
         
         body {
             font-family: Arial, sans-serif;
-            background-color: #e8e8e8;
+            background-color: #f0f0f0;
             color: #000;
             line-height: 1.6;
-            padding: 10px;
-        }
-        
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-            background: #f5f5f5;
-            border-radius: 10px;
-            overflow: hidden;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            min-height: 100vh;
         }
         
         .header {
-            background: linear-gradient(135deg, #1e3a8a, #3b4d7a);
+            background-color: #1e3a8a;
             color: white;
             padding: 20px;
             text-align: center;
         }
         
         .header img {
-            max-height: 50px;
+            max-height: 60px;
             margin-bottom: 10px;
         }
         
         .header h1 {
-            font-size: 24px;
-            margin: 0;
+            font-size: 28px;
+            font-weight: bold;
         }
         
-        .form-container {
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
             padding: 20px;
+        }
+        
+        .form-section {
+            background: white;
+            border-radius: 8px;
+            padding: 25px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .form-section h2 {
+            color: #1e3a8a;
+            margin-bottom: 20px;
+            font-size: 20px;
+            border-bottom: 2px solid #1e3a8a;
+            padding-bottom: 10px;
         }
         
         .form-group {
             margin-bottom: 20px;
         }
         
-        .form-group label {
+        label {
             display: block;
             margin-bottom: 5px;
             font-weight: bold;
             color: #333;
         }
         
-        .form-group input[type="text"],
-        .form-group input[type="number"],
-        .form-group input[type="url"],
-        .form-group input[type="color"],
-        .form-group textarea,
-        .form-group select {
+        input[type="text"], input[type="number"], input[type="url"], input[type="color"], textarea, select {
             width: 100%;
-            padding: 10px;
+            padding: 12px;
             border: 1px solid #ddd;
-            border-radius: 5px;
-            font-size: 14px;
+            border-radius: 4px;
+            font-size: 16px;
         }
         
-        .form-group textarea {
-            height: 80px;
+        textarea {
+            min-height: 80px;
             resize: vertical;
         }
         
@@ -91,455 +95,385 @@
             gap: 8px;
         }
         
-        .checkbox-item input[type="checkbox"] {
+        input[type="checkbox"] {
             width: auto;
+            margin: 0;
         }
         
-        .section-title {
-            background: #1e3a8a;
-            color: white;
-            padding: 10px 15px;
-            margin: 20px -20px 15px -20px;
-            font-weight: bold;
-            font-size: 16px;
-        }
-        
-        .btn-group {
+        .radio-group {
             display: flex;
-            gap: 10px;
             flex-wrap: wrap;
-            margin-top: 30px;
-        }
-        
-        .btn {
-            background: #1e3a8a;
-            color: white;
-            padding: 12px 24px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 16px;
-            font-weight: bold;
-            flex: 1;
-            min-width: 150px;
-        }
-        
-        .btn:hover {
-            background: #2563eb;
-        }
-        
-        .output-container {
-            margin-top: 30px;
-            padding: 20px;
-            background: #fff;
-            border: 2px solid #1e3a8a;
-            border-radius: 5px;
-            display: none;
-        }
-        
-        .output-header {
-            background: #1e3a8a;
-            color: white;
-            padding: 10px 15px;
-            margin: -20px -20px 15px -20px;
-            font-weight: bold;
-        }
-        
-        #generatedCode {
-            width: 100%;
-            height: 400px;
-            font-family: 'Courier New', monospace;
-            font-size: 12px;
-            border: 1px solid #ddd;
-            padding: 10px;
-            background: #f8f9fa;
-            resize: vertical;
-        }
-        
-        .copy-btn {
-            background: #059669;
+            gap: 15px;
             margin-top: 10px;
         }
         
-        .copy-btn:hover {
-            background: #047857;
+        .radio-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
         
-        @media (max-width: 600px) {
-            .checkbox-group {
-                flex-direction: column;
+        input[type="radio"] {
+            width: auto;
+            margin: 0;
+        }
+        
+        .btn {
+            background-color: #1e3a8a;
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 4px;
+            font-size: 18px;
+            cursor: pointer;
+            display: block;
+            width: 100%;
+            margin: 20px 0;
+        }
+        
+        .btn:hover {
+            background-color: #1e40af;
+        }
+        
+        .output-section {
+            background: #f8f9fa;
+            border: 2px solid #1e3a8a;
+            border-radius: 8px;
+            padding: 20px;
+            margin-top: 30px;
+        }
+        
+        .output-content {
+            background: white;
+            padding: 20px;
+            border-radius: 4px;
+            max-height: 500px;
+            overflow-y: auto;
+            white-space: pre-wrap;
+            font-family: monospace;
+            font-size: 14px;
+            line-height: 1.4;
+        }
+        
+        .copy-btn {
+            background-color: #059669;
+            margin-top: 10px;
+            width: auto;
+            display: inline-block;
+        }
+        
+        .copy-btn:hover {
+            background-color: #047857;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
             }
             
-            .btn-group {
-                flex-direction: column;
-            }
-            
-            .btn {
-                min-width: auto;
+            .form-section {
+                padding: 15px;
             }
             
             .header h1 {
-                font-size: 20px;
+                font-size: 24px;
+            }
+            
+            .checkbox-group, .radio-group {
+                flex-direction: column;
+                gap: 10px;
             }
         }
     </style>
 </head>
 <body>
+    <div class="header">
+        <img src="https://brucewade.co.za/wp-content/uploads/2025/07/bat-3.png" alt="Logo" onerror="this.style.display='none'">
+        <h1>Assessment Developer Application</h1>
+    </div>
+    
     <div class="container">
-        <div class="header">
-            <img src="https://brucewade.co.za/wp-content/uploads/2025/07/bat-3.png" alt="Logo">
-            <h1>Assessment Developer Application</h1>
-        </div>
-        
-        <div class="form-container">
-            <form id="assessmentForm">
+        <form id="assessmentForm">
+            <div class="form-section">
+                <h2>Basic Assessment Information</h2>
+                
                 <div class="form-group">
-                    <label for="assessmentName">1. Name of the assessment:</label>
+                    <label for="assessmentName">Name of the Assessment *</label>
                     <input type="text" id="assessmentName" required>
                 </div>
                 
                 <div class="form-group">
-                    <label for="assessmentDescription">2. Brief description of what is to be assessed:</label>
-                    <textarea id="assessmentDescription" required></textarea>
+                    <label for="assessmentDescription">Brief Description of What is to be Assessed *</label>
+                    <textarea id="assessmentDescription" required placeholder="Describe what this assessment will evaluate..."></textarea>
                 </div>
                 
                 <div class="form-group">
-                    <label for="methodology">3. Is this based on a current published methodology:</label>
-                    <input type="text" id="methodology" placeholder="Enter methodology name or 'No'">
+                    <label for="methodology">Is this based on a current published methodology?</label>
+                    <input type="text" id="methodology" placeholder="Enter methodology name or leave blank">
                 </div>
                 
                 <div class="form-group">
-                    <label for="numQuestions">4. Number of questions:</label>
-                    <input type="number" id="numQuestions" min="1" max="100" required>
+                    <label for="numQuestions">Number of Questions *</label>
+                    <input type="number" id="numQuestions" min="1" max="50" required>
                 </div>
                 
                 <div class="form-group">
-                    <label for="answerType">5. Type of answers required:</label>
-                    <select id="answerType" required>
-                        <option value="">Select answer type</option>
-                        <option value="yesno">Yes/No</option>
-                        <option value="multiple">Multiple choice</option>
-                        <option value="scale">Sliding scale 1 to 5</option>
-                        <option value="input">Input fields</option>
-                    </select>
+                    <label>Type of Answers Required *</label>
+                    <div class="radio-group">
+                        <div class="radio-item">
+                            <input type="radio" id="yesNo" name="answerType" value="yesNo" required>
+                            <label for="yesNo">Yes/No</label>
+                        </div>
+                        <div class="radio-item">
+                            <input type="radio" id="multipleChoice" name="answerType" value="multipleChoice">
+                            <label for="multipleChoice">Multiple Choice</label>
+                        </div>
+                        <div class="radio-item">
+                            <input type="radio" id="slidingScale" name="answerType" value="slidingScale">
+                            <label for="slidingScale">Sliding Scale 1 to 5</label>
+                        </div>
+                        <div class="radio-item">
+                            <input type="radio" id="inputFields" name="answerType" value="inputFields">
+                            <label for="inputFields">Input Fields</label>
+                        </div>
+                    </div>
                 </div>
                 
                 <div class="form-group">
-                    <label for="resultCategories">6. Different types of result categories (comma separated, leave blank to auto-derive):</label>
-                    <input type="text" id="resultCategories" placeholder="e.g., Excellent, Good, Average, Needs Improvement">
+                    <label for="resultCategories">Different Types of Result Categories</label>
+                    <textarea id="resultCategories" placeholder="Enter result categories separated by commas, or leave blank to auto-generate based on methodology and description"></textarea>
                 </div>
-                
-                <div class="section-title">7. User Input Fields to Include</div>
+            </div>
+            
+            <div class="form-section">
+                <h2>User Input Fields</h2>
+                <label>Select which input fields to include:</label>
                 <div class="checkbox-group">
                     <div class="checkbox-item">
-                        <input type="checkbox" id="includeName">
+                        <input type="checkbox" id="includeName" value="name">
                         <label for="includeName">Name</label>
                     </div>
                     <div class="checkbox-item">
-                        <input type="checkbox" id="includeEmail">
+                        <input type="checkbox" id="includeEmail" value="email">
                         <label for="includeEmail">Email</label>
                     </div>
                     <div class="checkbox-item">
-                        <input type="checkbox" id="includeCompany">
+                        <input type="checkbox" id="includeCompany" value="company">
                         <label for="includeCompany">Company</label>
                     </div>
                     <div class="checkbox-item">
-                        <input type="checkbox" id="includeCell">
-                        <label for="includeCell">Cell</label>
+                        <input type="checkbox" id="includeCell" value="cell">
+                        <label for="includeCell">Cell Phone</label>
                     </div>
                 </div>
-                
-                <div class="section-title">8. Compatibility Requirements</div>
+            </div>
+            
+            <div class="form-section">
+                <h2>Technical Requirements</h2>
+                <label>Coding requirements:</label>
                 <div class="checkbox-group">
                     <div class="checkbox-item">
-                        <input type="checkbox" id="mobileCompatible" checked>
-                        <label for="mobileCompatible">Mobile phone compatible</label>
+                        <input type="checkbox" id="mobileCompatible" value="mobile" checked>
+                        <label for="mobileCompatible">Make compatible for mobile phone screens</label>
                     </div>
                     <div class="checkbox-item">
-                        <input type="checkbox" id="wordpressCompatible" checked>
-                        <label for="wordpressCompatible">WordPress compatible</label>
+                        <input type="checkbox" id="wordpressCompatible" value="wordpress" checked>
+                        <label for="wordpressCompatible">Make compatible for WordPress websites</label>
                     </div>
                 </div>
+            </div>
+            
+            <div class="form-section">
+                <h2>Design Options</h2>
                 
-                <div class="section-title">9. Design Settings</div>
                 <div class="form-group">
-                    <label for="logoLink">Link to logo:</label>
+                    <label for="logoLink">Link to Logo</label>
                     <input type="url" id="logoLink" placeholder="https://example.com/logo.png">
                 </div>
                 
                 <div class="form-group">
-                    <label for="actionButtonLink">Action button link:</label>
+                    <label for="actionButtonLink">Link for Action Button on Result Field</label>
                     <input type="url" id="actionButtonLink" placeholder="https://example.com/action">
                 </div>
                 
                 <div class="form-group">
-                    <label for="backgroundColor">Background colour:</label>
-                    <input type="color" id="backgroundColor" value="#f5f5f5">
+                    <label for="backgroundColor">Background Color</label>
+                    <input type="color" id="backgroundColor" value="#f0f0f0">
                 </div>
                 
                 <div class="form-group">
-                    <label for="fontColor">Font colour:</label>
+                    <label for="fontColor">Font Color</label>
                     <input type="color" id="fontColor" value="#000000">
                 </div>
                 
                 <div class="form-group">
-                    <label for="headingButtonColor">Heading and button background colour:</label>
+                    <label for="headingButtonColor">Heading and Button Background Color</label>
                     <input type="color" id="headingButtonColor" value="#1e3a8a">
                 </div>
-                
-                <div class="section-title">10. Results Screen Options</div>
+            </div>
+            
+            <div class="form-section">
+                <h2>Results Screen Options</h2>
                 <div class="checkbox-group">
                     <div class="checkbox-item">
-                        <input type="checkbox" id="showScore" checked>
-                        <label for="showScore">Show resultant score</label>
+                        <input type="checkbox" id="showScore" value="score" checked>
+                        <label for="showScore">Show the resultant score</label>
                     </div>
                     <div class="checkbox-item">
-                        <input type="checkbox" id="displayPersonaInfo" checked>
-                        <label for="displayPersonaInfo">Display persona name and company</label>
+                        <input type="checkbox" id="showPersonaInfo" value="personaInfo" checked>
+                        <label for="showPersonaInfo">Display the person's name and company (if selected)</label>
                     </div>
                     <div class="checkbox-item">
-                        <input type="checkbox" id="displayResultCategory" checked>
-                        <label for="displayResultCategory">Display result category and description</label>
+                        <input type="checkbox" id="showResultCategory" value="resultCategory" checked>
+                        <label for="showResultCategory">Display the result category and short description</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="showActionButton" value="actionButton" checked>
+                        <label for="showActionButton">Display an action text and button</label>
                     </div>
                 </div>
-                
-                <div class="form-group">
-                    <label for="actionText">Action text for button:</label>
-                    <input type="text" id="actionText" placeholder="Get Your Personalized Report" value="Learn More">
-                </div>
-                
-                <div class="btn-group">
-                    <button type="submit" class="btn">Generate Claude Prompt</button>
-                    <button type="button" class="btn" onclick="clearForm()">Clear Form</button>
-                </div>
-            </form>
-            
-            <div class="output-container" id="outputContainer">
-                <div class="output-header">Generated Claude Prompt - Copy and Paste to Claude</div>
-                <textarea id="generatedCode" readonly></textarea>
-                <button class="btn copy-btn" onclick="copyCode()">Copy Prompt to Clipboard</button>
             </div>
+            
+            <button type="button" class="btn" onclick="generateAssessment()">Generate Assessment Code</button>
+        </form>
+        
+        <div id="outputSection" class="output-section" style="display: none;">
+            <h2 style="color: #1e3a8a; margin-bottom: 15px;">Generated Claude Prompt</h2>
+            <p style="margin-bottom: 15px;">Copy the text below and paste it into Claude to generate your custom assessment HTML code:</p>
+            <div id="outputContent" class="output-content"></div>
+            <button type="button" class="btn copy-btn" onclick="copyToClipboard()">Copy to Clipboard</button>
         </div>
     </div>
     
     <script>
-        document.getElementById('assessmentForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            generateAssessmentCode();
-        });
-        
-        function generateAssessmentCode() {
+        function generateAssessment() {
             // Get form values
             const assessmentName = document.getElementById('assessmentName').value;
             const assessmentDescription = document.getElementById('assessmentDescription').value;
             const methodology = document.getElementById('methodology').value;
-            const numQuestions = parseInt(document.getElementById('numQuestions').value);
-            const answerType = document.getElementById('answerType').value;
+            const numQuestions = document.getElementById('numQuestions').value;
+            const answerType = document.querySelector('input[name="answerType"]:checked')?.value;
             const resultCategories = document.getElementById('resultCategories').value;
             
-            const includeName = document.getElementById('includeName').checked;
-            const includeEmail = document.getElementById('includeEmail').checked;
-            const includeCompany = document.getElementById('includeCompany').checked;
-            const includeCell = document.getElementById('includeCell').checked;
+            // Validate required fields
+            if (!assessmentName || !assessmentDescription || !numQuestions || !answerType) {
+                alert('Please fill in all required fields (marked with *)');
+                return;
+            }
             
-            const mobileCompatible = document.getElementById('mobileCompatible').checked;
-            const wordpressCompatible = document.getElementById('wordpressCompatible').checked;
+            // Get checkbox values
+            const userInputs = [];
+            if (document.getElementById('includeName').checked) userInputs.push('Name');
+            if (document.getElementById('includeEmail').checked) userInputs.push('Email');
+            if (document.getElementById('includeCompany').checked) userInputs.push('Company');
+            if (document.getElementById('includeCell').checked) userInputs.push('Cell Phone');
             
+            const techRequirements = [];
+            if (document.getElementById('mobileCompatible').checked) techRequirements.push('Mobile phone compatible');
+            if (document.getElementById('wordpressCompatible').checked) techRequirements.push('WordPress compatible');
+            
+            const resultsOptions = [];
+            if (document.getElementById('showScore').checked) resultsOptions.push('Show resultant score');
+            if (document.getElementById('showPersonaInfo').checked) resultsOptions.push('Display person name and company');
+            if (document.getElementById('showResultCategory').checked) resultsOptions.push('Display result category and description');
+            if (document.getElementById('showActionButton').checked) resultsOptions.push('Display action button');
+            
+            // Get design options
             const logoLink = document.getElementById('logoLink').value;
             const actionButtonLink = document.getElementById('actionButtonLink').value;
             const backgroundColor = document.getElementById('backgroundColor').value;
             const fontColor = document.getElementById('fontColor').value;
             const headingButtonColor = document.getElementById('headingButtonColor').value;
             
-            const showScore = document.getElementById('showScore').checked;
-            const displayPersonaInfo = document.getElementById('displayPersonaInfo').checked;
-            const displayResultCategory = document.getElementById('displayResultCategory').checked;
-            const actionText = document.getElementById('actionText').value;
-            
-            // Generate categories if not provided
-            let categories = [];
-            if (resultCategories.trim()) {
-                categories = resultCategories.split(',').map(c => c.trim());
-            } else {
-                categories = generateDefaultCategories(answerType);
-            }
-            
-            // Generate the Claude prompt
-            const claudePrompt = generateHTMLCode({
-                assessmentName, assessmentDescription, methodology, numQuestions, answerType,
-                categories, includeName, includeEmail, includeCompany, includeCell,
-                mobileCompatible, wordpressCompatible, logoLink, actionButtonLink,
-                backgroundColor, fontColor, headingButtonColor, showScore,
-                displayPersonaInfo, displayResultCategory, actionText
+            // Generate the prompt
+            const prompt = generateClaudePrompt({
+                assessmentName,
+                assessmentDescription,
+                methodology,
+                numQuestions,
+                answerType,
+                resultCategories,
+                userInputs,
+                techRequirements,
+                resultsOptions,
+                logoLink,
+                actionButtonLink,
+                backgroundColor,
+                fontColor,
+                headingButtonColor
             });
             
-            // Display the prompt
-            document.getElementById('generatedCode').value = claudePrompt;
-            document.getElementById('outputContainer').style.display = 'block';
-            document.getElementById('outputContainer').scrollIntoView({ behavior: 'smooth' });
+            // Display output
+            document.getElementById('outputContent').textContent = prompt;
+            document.getElementById('outputSection').style.display = 'block';
+            document.getElementById('outputSection').scrollIntoView({ behavior: 'smooth' });
         }
         
-        function generateDefaultCategories(answerType) {
-            switch(answerType) {
-                case 'yesno':
-                case 'multiple':
-                    return ['Excellent', 'Good', 'Average', 'Needs Improvement'];
-                case 'scale':
-                    return ['Outstanding', 'Very Good', 'Good', 'Fair', 'Poor'];
-                case 'input':
-                    return ['High Performance', 'Good Performance', 'Average Performance', 'Below Average'];
-                default:
-                    return ['Level 4', 'Level 3', 'Level 2', 'Level 1'];
-            }
-        }
-        
-        function generateHTMLCode(config) {
-            // Create comprehensive prompt for Claude
-            const prompt = `Create a professional HTML assessment application with the following specifications:
-
-**Assessment Details:**
-- Name: "${config.assessmentName}"
-- Description: "${config.assessmentDescription}"
-${config.methodology && config.methodology.toLowerCase() !== 'no' ? `- Based on methodology: "${config.methodology}"` : '- Not based on a specific methodology'}
-- Number of questions: ${config.numQuestions}
-- Answer type: ${getAnswerTypeDescription(config.answerType)}
-- Result categories: ${config.categories.join(', ')}
-
-**User Information Fields to Include:**
-${config.includeName ? '- Name (required)' : ''}
-${config.includeEmail ? '- Email (required)' : ''}
-${config.includeCompany ? '- Company (optional)' : ''}
-${config.includeCell ? '- Phone number (optional)' : ''}
-
-**Technical Requirements:**
-${config.mobileCompatible ? '- Mobile phone compatible (responsive design)' : ''}
-${config.wordpressCompatible ? '- WordPress compatible' : ''}
-
-**Design Specifications:**
-${config.logoLink ? `- Logo URL: ${config.logoLink}` : '- No logo specified'}
-- Background color: ${config.backgroundColor}
-- Font color: ${config.fontColor}
-- Heading and button color: ${config.headingButtonColor}
-${config.actionButtonLink ? `- Action button link: ${config.actionButtonLink}` : '- No action button link specified'}
-- Action button text: "${config.actionText}"
-
-**Results Screen Requirements:**
-${config.showScore ? '- Display the calculated score percentage' : '- Do not display score'}
-${config.displayPersonaInfo ? '- Display user name and company information' : '- Do not display personal information'}
-${config.displayResultCategory ? '- Display result category and description' : '- Do not display category information'}
-
-**Specific Instructions:**
-1. Create a complete HTML file with embedded CSS and JavaScript
-2. Include placeholder text for all ${config.numQuestions} questions (e.g., "Enter your question 1 text here")
-3. Implement proper scoring logic based on the answer type selected
-4. Create responsive design that works on mobile devices
-5. Include proper form validation
-6. Add smooth scrolling to results section
-7. Style the application professionally with the specified colors
-8. Generate realistic category descriptions for each result level
-9. Make the code production-ready and deployable
-${config.answerType === 'scale' ? '10. For sliding scale questions, use range inputs from 1-5' : ''}
-${config.answerType === 'multiple' ? '10. For multiple choice, provide 4 options (A, B, C, D) per question' : ''}
-${config.answerType === 'yesno' ? '10. For Yes/No questions, provide radio button options' : ''}
-${config.answerType === 'input' ? '10. For input fields, use text input boxes with proper validation' : ''}
-
-**Additional Notes:**
-- Ensure all styling is contained within the HTML file
-- Use modern CSS techniques for better visual appeal
-- Include hover effects and smooth transitions
-- Make the scoring algorithm fair and logical
-- Provide meaningful feedback in the results section
-- Ensure accessibility with proper form labels and ARIA attributes
-
-Please create the complete HTML code that meets all these specifications.`;
-
-            return prompt;
-        }
-
-        function getAnswerTypeDescription(answerType) {
-            switch(answerType) {
-                case 'yesno': return 'Yes/No radio buttons';
-                case 'multiple': return 'Multiple choice with 4 options';
-                case 'scale': return 'Sliding scale from 1 to 5';
-                case 'input': return 'Text input fields';
-                default: return 'Text input fields';
-            }
-        }
-        
-        function generateAnswerOptions(answerType, questionNum) {
-            switch(answerType) {
-                case 'yesno':
-                    return `                    <div class="answer-options">
-                        <label><input type="radio" name="q${questionNum}" value="1"> Yes</label>
-                        <label><input type="radio" name="q${questionNum}" value="0"> No</label>
-                    </div>`;
-                case 'multiple':
-                    return `                    <div class="answer-options">
-                        <label><input type="radio" name="q${questionNum}" value="4"> Option A</label>
-                        <label><input type="radio" name="q${questionNum}" value="3"> Option B</label>
-                        <label><input type="radio" name="q${questionNum}" value="2"> Option C</label>
-                        <label><input type="radio" name="q${questionNum}" value="1"> Option D</label>
-                    </div>`;
-                case 'scale':
-                    return `                    <div class="scale-container">
-                        <span>1</span>
-                        <input type="range" name="q${questionNum}" min="1" max="5" value="3">
-                        <span>5</span>
-                    </div>`;
-                case 'input':
-                    return `                    <input type="text" name="q${questionNum}" placeholder="Enter your answer" required>`;
-                default:
-                    return `                    <input type="text" name="q${questionNum}" placeholder="Enter your answer" required>`;
-            }
-        }
-        
-        function generateScoreCalculation(answerType, numQuestions) {
-            switch(answerType) {
-                case 'yesno':
-                    return `for (let i = 1; i <= totalQuestions; i++) {
-                let answer = document.querySelector('input[name="q' + i + '"]:checked');
-                if (answer) score += parseInt(answer.value) * 100 / totalQuestions;
-            }`;
-                case 'multiple':
-                    return `for (let i = 1; i <= totalQuestions; i++) {
-                let answer = document.querySelector('input[name="q' + i + '"]:checked');
-                if (answer) score += parseInt(answer.value) * 25;
-            }
-            score = Math.min(score, 100);`;
-                case 'scale':
-                    return `for (let i = 1; i <= totalQuestions; i++) {
-                let answer = document.querySelector('input[name="q' + i + '"]');
-                if (answer) score += parseInt(answer.value) * 20;
-            }
-            score = Math.min(score, 100);`;
-                case 'input':
-                    return `// For input fields, assign random score for demo
-            score = Math.floor(Math.random() * 100);`;
-                default:
-                    return `score = Math.floor(Math.random() * 100);`;
-            }
-        }
-        
-        function clearForm() {
-            document.getElementById('assessmentForm').reset();
-            document.getElementById('outputContainer').style.display = 'none';
-        }
-        
-        function copyCode() {
-            const codeTextarea = document.getElementById('generatedCode');
-            codeTextarea.select();
-            codeTextarea.setSelectionRange(0, 99999);
-            document.execCommand('copy');
+        function generateClaudePrompt(data) {
+            const answerTypeDescriptions = {
+                'yesNo': 'Yes/No questions with radio buttons',
+                'multipleChoice': 'Multiple choice questions with 4 options each',
+                'slidingScale': 'Rating scale questions from 1 to 5',
+                'inputFields': 'Open-ended text input questions'
+            };
             
-            const btn = event.target;
-            const originalText = btn.textContent;
-            btn.textContent = 'Copied!';
-            btn.style.background = '#059669';
+            return `Create a complete HTML assessment application with the following specifications:
+
+ASSESSMENT DETAILS:
+- Assessment Name: "${data.assessmentName}"
+- Description: "${data.assessmentDescription}"
+${data.methodology ? `- Based on Methodology: "${data.methodology}"` : '- No specific methodology provided (create questions based on the description)'}
+- Number of Questions: ${data.numQuestions}
+- Answer Type: ${answerTypeDescriptions[data.answerType]}
+
+USER INPUT FIELDS:
+${data.userInputs.length > 0 ? data.userInputs.map(field => `- Include ${field} field`).join('\n') : '- No user input fields required'}
+
+TECHNICAL REQUIREMENTS:
+${data.techRequirements.length > 0 ? data.techRequirements.map(req => `- ${req}`).join('\n') : '- Standard HTML implementation'}
+
+DESIGN SPECIFICATIONS:
+- Background Color: ${data.backgroundColor}
+- Font Color: ${data.fontColor}
+- Heading and Button Color: ${data.headingButtonColor}
+${data.logoLink ? `- Logo URL: ${data.logoLink}` : '- No logo specified'}
+${data.actionButtonLink ? `- Action Button Link: ${data.actionButtonLink}` : '- No action button link specified'}
+
+RESULTS SCREEN FEATURES:
+${data.resultsOptions.length > 0 ? data.resultsOptions.map(option => `- ${option}`).join('\n') : '- Basic results display'}
+
+${data.resultCategories ? `RESULT CATEGORIES: ${data.resultCategories}` : 'AUTO-GENERATE RESULT CATEGORIES: Please create appropriate result categories based on the assessment description and methodology.'}
+
+INSTRUCTIONS:
+1. Create questions that are relevant to "${data.assessmentDescription}"${data.methodology ? ` and align with the "${data.methodology}" methodology` : ''}
+2. Implement a scoring system that categorizes results appropriately
+3. Include all specified user input fields at the beginning
+4. Use the exact colors specified in the design
+5. Make the interface responsive for mobile devices
+6. Include proper form validation
+7. Create a results page that displays the specified information
+8. Generate the complete HTML code in a single file with embedded CSS and JavaScript
+
+Please create the complete, functional HTML assessment application now.`;
+        }
+        
+        function copyToClipboard() {
+            const outputContent = document.getElementById('outputContent');
+            const textToCopy = outputContent.textContent;
             
-            setTimeout(() => {
-                btn.textContent = originalText;
-                btn.style.background = '#047857';
-            }, 2000);
+            navigator.clipboard.writeText(textToCopy).then(function() {
+                const button = document.querySelector('.copy-btn');
+                const originalText = button.textContent;
+                button.textContent = 'Copied!';
+                button.style.backgroundColor = '#059669';
+                
+                setTimeout(() => {
+                    button.textContent = originalText;
+                    button.style.backgroundColor = '#059669';
+                }, 2000);
+            }).catch(function(err) {
+                alert('Failed to copy to clipboard. Please select and copy the text manually.');
+            });
         }
     </script>
 </body>
