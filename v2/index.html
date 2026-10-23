@@ -1,0 +1,1240 @@
+<!DOCTYPE html>
+<html lang="en-ZA">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Assessment Developer</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --navy: #1e3a8a;
+            --navy-dark: #172c69;
+            --green: #059669;
+            --amber: #b45309;
+            --ink: #1f2937;
+            --muted: #5b6474;
+            --line: #d9dee7;
+            --soft: #eef2fb;
+            --page: #f0f2f6;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: var(--page);
+            color: var(--ink);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        .header {
+            background-color: var(--navy);
+            color: white;
+            padding: 18px 16px;
+            text-align: center;
+        }
+
+        .header img { max-height: 70px; margin-bottom: 6px; }
+        .header h1 { font-size: 1.7rem; }
+        .header p { opacity: 0.85; font-size: 0.95rem; }
+        .header a { color: white; }
+
+        .container { max-width: 860px; margin: 0 auto; padding: 20px 16px 60px; }
+
+        .toolbar { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 16px; }
+
+        .stepper {
+            display: flex; gap: 6px; overflow-x: auto; padding-bottom: 6px; margin-bottom: 16px;
+        }
+
+        .stepper button {
+            flex: 0 0 auto; border: 1px solid var(--line); background: white; color: var(--muted);
+            border-radius: 20px; padding: 6px 12px; font-size: 0.85rem; cursor: pointer;
+        }
+
+        .stepper button.done { color: var(--navy); border-color: var(--navy); }
+        .stepper button.active { background: var(--navy); color: white; border-color: var(--navy); }
+
+        .progress-wrap { height: 6px; background: var(--line); border-radius: 3px; margin-bottom: 20px; overflow: hidden; }
+        .progress-bar { height: 100%; background: var(--navy); width: 0; transition: width 0.3s; }
+
+        .step { display: none; background: white; border-radius: 8px; padding: 24px; box-shadow: 0 2px 10px rgba(0,0,0,0.08); }
+        .step.active { display: block; }
+
+        .step h2 { color: var(--navy); font-size: 1.4rem; margin-bottom: 4px; }
+        .step h3 { color: var(--navy); font-size: 1.1rem; margin: 22px 0 8px; padding-top: 16px; border-top: 1px solid var(--line); }
+        .step-intro { color: var(--muted); margin-bottom: 18px; }
+
+        .form-group { margin-bottom: 16px; }
+        label { display: block; font-weight: bold; margin-bottom: 5px; }
+        .hint { font-weight: normal; color: var(--muted); font-size: 0.88rem; margin-top: 4px; }
+        .req { color: #c0392b; }
+
+        input[type="text"], input[type="url"], input[type="number"], textarea, select {
+            width: 100%; padding: 10px; border: 2px solid var(--line); border-radius: 4px;
+            font-size: 16px; font-family: inherit; background: white;
+        }
+
+        input:focus, textarea:focus, select:focus { outline: none; border-color: var(--navy); }
+        textarea { min-height: 80px; resize: vertical; }
+        input.invalid, textarea.invalid { border-color: #c0392b; }
+
+        input[type="color"] { width: 70px; height: 42px; border: 2px solid var(--line); border-radius: 4px; padding: 2px; cursor: pointer; }
+
+        .choice-group { display: flex; flex-direction: column; gap: 8px; }
+        .choice-row { display: flex; gap: 8px; align-items: flex-start; font-weight: normal; margin: 0; cursor: pointer; }
+        .choice-row input { margin-top: 5px; width: 18px; height: 18px; flex: 0 0 auto; }
+        .choice-row.disabled { color: #9aa2b1; cursor: not-allowed; }
+        .soon { display: inline-block; font-size: 0.75rem; background: #fdf3e2; color: var(--amber); border-radius: 10px; padding: 0 8px; margin-left: 6px; font-weight: bold; }
+
+        .row { display: flex; gap: 12px; flex-wrap: wrap; }
+        .row > .form-group { flex: 1 1 200px; }
+
+        .question-row { display: flex; gap: 8px; align-items: center; margin-bottom: 8px; }
+        .question-row .num { width: 28px; text-align: right; color: var(--muted); font-weight: bold; flex: 0 0 auto; }
+        .question-row input[type="text"] { flex: 1; }
+        .question-row .rev { font-weight: normal; font-size: 0.85rem; display: flex; gap: 4px; align-items: center; margin: 0; white-space: nowrap; }
+
+        .option-row { display: flex; gap: 8px; margin-bottom: 8px; align-items: center; }
+        .option-row input[type="text"] { flex: 1; }
+        .option-row input[type="number"] { width: 90px; }
+
+        .band { border: 1px solid var(--line); border-radius: 6px; padding: 14px; margin-bottom: 12px; background: #fafbfd; }
+        .band-title { font-weight: bold; color: var(--navy); margin-bottom: 8px; }
+        .band .row > .form-group { flex: 1 1 120px; }
+
+        .notice { border-radius: 6px; padding: 10px 14px; margin: 10px 0 16px; font-size: 0.92rem; }
+        .notice.info { background: var(--soft); color: var(--navy); }
+        .notice.warn { background: #fdf3e2; color: #7c4a03; }
+        .notice.ok { background: #e6f6ef; color: #04603f; }
+
+        .btn {
+            background-color: var(--navy); color: white; padding: 12px 22px; border: none;
+            border-radius: 4px; font-size: 16px; cursor: pointer; font-family: inherit;
+        }
+
+        .btn:hover { background-color: var(--navy-dark); }
+        .btn.secondary { background: white; color: var(--navy); border: 2px solid var(--navy); }
+        .btn.small { padding: 6px 12px; font-size: 14px; }
+        .btn.copy { background: var(--green); }
+        .btn.copied { background: #047857; }
+        .btn.link { background: none; color: var(--navy); text-decoration: underline; padding: 6px 4px; }
+
+        .nav { display: flex; justify-content: space-between; gap: 10px; margin-top: 20px; }
+
+        .prompt-card { border: 1px solid var(--line); border-radius: 8px; margin-bottom: 18px; overflow: hidden; }
+        .prompt-head { background: var(--soft); padding: 12px 16px; display: flex; justify-content: space-between; gap: 10px; align-items: center; flex-wrap: wrap; }
+        .prompt-head h4 { color: var(--navy); font-size: 1.05rem; }
+        .prompt-head p { color: var(--muted); font-size: 0.88rem; }
+        .prompt-text {
+            white-space: pre-wrap; word-wrap: break-word; font-family: Consolas, "Courier New", monospace;
+            font-size: 0.85rem; padding: 14px 16px; max-height: 340px; overflow-y: auto; background: white;
+        }
+
+        .change-list { list-style: none; padding: 10px 16px; }
+        .change-list li { display: flex; justify-content: space-between; gap: 10px; align-items: center; padding: 8px 0; border-bottom: 1px solid var(--line); }
+        .change-list li:last-child { border-bottom: none; }
+
+        .later { border: 2px dashed #e7c88f; border-radius: 8px; padding: 14px 16px; background: #fffaf1; }
+        .later ul { margin: 8px 0 0 20px; color: var(--muted); }
+
+        .footer { text-align: center; color: var(--muted); font-size: 0.85rem; padding: 20px 16px 30px; }
+
+        @media (max-width: 600px) {
+            .step { padding: 18px 14px; }
+            .header h1 { font-size: 1.4rem; }
+            .question-row { flex-wrap: wrap; }
+            .question-row .num { width: auto; }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <img src="https://brucewade.co.za/wp-content/uploads/2025/07/bat-3.png" alt="Bruce Wade logo" onerror="this.style.display='none'">
+        <h1>Assessment Developer</h1>
+        <p>Answer a few questions. Get the prompts that build your assessment app with Claude.</p>
+    </div>
+
+    <div class="container">
+        <div class="toolbar">
+            <button type="button" class="btn secondary small" onclick="loadExample()">Load example</button>
+            <button type="button" class="btn secondary small" onclick="downloadBrief()">Save brief to a file</button>
+            <button type="button" class="btn secondary small" onclick="document.getElementById('briefFile').click()">Open a saved brief</button>
+            <input type="file" id="briefFile" accept=".json,application/json" style="display:none" onchange="openBrief(this)">
+            <button type="button" class="btn link small" onclick="startOver()">Start over</button>
+        </div>
+
+        <div class="stepper" id="stepper"></div>
+        <div class="progress-wrap"><div class="progress-bar" id="progressBar"></div></div>
+
+        <!-- Step 1 -->
+        <section class="step" data-title="About you">
+            <h2>1. About you</h2>
+            <p class="step-intro">Whose assessment is this? These details appear in the app and help Claude set the right voice.</p>
+            <div class="form-group">
+                <label for="ownerBusiness">Your name or business name</label>
+                <input type="text" id="ownerBusiness" data-key="owner.business" placeholder="e.g. Jason Sandler Speaks">
+            </div>
+            <div class="form-group">
+                <label for="ownerWebsite">Your website</label>
+                <input type="url" id="ownerWebsite" data-key="owner.website" placeholder="https://example.co.za">
+                <p class="hint">Optional. Leave blank if you do not have one yet.</p>
+            </div>
+        </section>
+
+        <!-- Step 2 -->
+        <section class="step" data-title="The assessment">
+            <h2>2. The assessment</h2>
+            <p class="step-intro">Describe it the way you would to a friend. Plain words work best.</p>
+            <div class="form-group">
+                <label for="aName">Name of the assessment <span class="req">*</span></label>
+                <input type="text" id="aName" data-key="assessment.name" placeholder="e.g. Work Place Stress Assessment">
+            </div>
+            <div class="form-group">
+                <label for="aMeasures">What does it measure? <span class="req">*</span></label>
+                <textarea id="aMeasures" data-key="assessment.measures" placeholder="e.g. How much stress there is in a workplace, as seen by a manager or staff member."></textarea>
+            </div>
+            <div class="form-group">
+                <label for="aAudience">Who will take it?</label>
+                <input type="text" id="aAudience" data-key="assessment.audience" placeholder="e.g. Business owners, managers and staff">
+            </div>
+            <div class="form-group">
+                <label for="aOutcome">What should they do after seeing their result?</label>
+                <input type="text" id="aOutcome" data-key="assessment.outcome" placeholder="e.g. Book a call to talk about a workshop">
+            </div>
+            <div class="form-group">
+                <label for="aIntro">Welcome line</label>
+                <textarea id="aIntro" data-key="assessment.intro" placeholder="e.g. A short, confidential check on the stress levels in your workplace."></textarea>
+                <p class="hint">Optional. One or two sentences for the first screen. Leave blank and Claude will write one.</p>
+            </div>
+            <div class="form-group">
+                <label for="aMethod">Is it based on a published method or model?</label>
+                <input type="text" id="aMethod" data-key="assessment.methodology" placeholder="e.g. Enneagram, DISC, or leave blank">
+            </div>
+        </section>
+
+        <!-- Step 3 -->
+        <section class="step" data-title="Questions">
+            <h2>3. Questions</h2>
+            <p class="step-intro">Choose how people answer, then write your questions or let Claude draft them.</p>
+
+            <div class="form-group">
+                <label>How will people answer?</label>
+                <div class="choice-group">
+                    <label class="choice-row"><input type="radio" name="qType" data-key="questions.type" value="yesNo"> Yes or No</label>
+                    <label class="choice-row"><input type="radio" name="qType" data-key="questions.type" value="scale"> A scale from 1 to 5</label>
+                    <label class="choice-row"><input type="radio" name="qType" data-key="questions.type" value="choice"> Multiple choice (the same options for every question)</label>
+                </div>
+            </div>
+
+            <div class="form-group" data-show="questions.type=yesNo">
+                <label for="yesScores">Which answer scores a point?</label>
+                <select id="yesScores" data-key="questions.yesScores">
+                    <option value="yes">Yes scores 1 point</option>
+                    <option value="no">No scores 1 point</option>
+                </select>
+            </div>
+
+            <div class="row" data-show="questions.type=scale">
+                <div class="form-group">
+                    <label for="scaleLow">Label for 1</label>
+                    <input type="text" id="scaleLow" data-key="questions.scaleLow">
+                </div>
+                <div class="form-group">
+                    <label for="scaleHigh">Label for 5</label>
+                    <input type="text" id="scaleHigh" data-key="questions.scaleHigh">
+                </div>
+            </div>
+
+            <div class="form-group" data-show="questions.type=choice">
+                <label>Answer options and their points</label>
+                <div id="choiceList"></div>
+                <button type="button" class="btn secondary small" onclick="addChoice()">Add an option</button>
+                <p class="hint">Between 2 and 6 options.</p>
+            </div>
+
+            <div class="form-group">
+                <label for="qCount">Number of questions <span class="req">*</span></label>
+                <input type="number" id="qCount" data-key="questions.count" min="1" max="50" style="max-width:120px">
+                <p class="hint">Ten is a good number. It takes about three minutes.</p>
+            </div>
+
+            <div class="form-group">
+                <label>Who writes the questions?</label>
+                <div class="choice-group">
+                    <label class="choice-row"><input type="radio" name="qMode" data-key="questions.mode" value="own"> I will type my own questions</label>
+                    <label class="choice-row"><input type="radio" name="qMode" data-key="questions.mode" value="draft"> Let Claude draft them, and show them to me first</label>
+                </div>
+            </div>
+
+            <div data-show="questions.mode=own">
+                <label>Your questions</label>
+                <p class="hint" style="margin-bottom:10px">Tick "Reverse" where the answer that normally scores a point should not. For example, a positive statement in a stress test.</p>
+                <div id="questionList"></div>
+            </div>
+
+            <div class="form-group" data-show="questions.mode=draft">
+                <label for="draftNotes">Anything Claude should know when drafting?</label>
+                <textarea id="draftNotes" data-key="questions.draftNotes" placeholder="e.g. Cover workload, sleep, relationships and energy. Keep each question under 20 words."></textarea>
+            </div>
+
+            <h3>How the questions appear</h3>
+            <div class="choice-group">
+                <label class="choice-row"><input type="checkbox" data-key="flow.oneAtATime"> One question at a time</label>
+                <label class="choice-row"><input type="checkbox" data-key="flow.progress"> Show a progress bar</label>
+                <label class="choice-row"><input type="checkbox" data-key="flow.back"> Allow going back to change an answer</label>
+                <label class="choice-row"><input type="checkbox" data-key="flow.autoAdvance"> Move on automatically once an answer is picked</label>
+            </div>
+        </section>
+
+        <!-- Step 4 -->
+        <section class="step" data-title="Scoring and results">
+            <h2>4. Scoring and results</h2>
+            <p class="step-intro">Split the scores into bands. Each band gets a heading, a short description and a next step.</p>
+
+            <div class="notice info" id="scoreRange"></div>
+
+            <div class="row">
+                <div class="form-group">
+                    <label for="bandCount">Number of result bands</label>
+                    <select id="bandCount" onchange="setBandCount(this.value)">
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                    </select>
+                </div>
+                <div class="form-group" style="display:flex;align-items:flex-end">
+                    <button type="button" class="btn secondary" onclick="suggestRanges()">Suggest score ranges</button>
+                </div>
+            </div>
+
+            <div id="bandList"></div>
+            <div id="bandCheck"></div>
+            <p class="hint">Leave a heading, description or next step blank and Claude will write it for you.</p>
+
+            <h3>The results screen shows</h3>
+            <div class="choice-group">
+                <label class="choice-row"><input type="checkbox" data-key="results.showScore"> The score</label>
+                <label class="choice-row" id="showNameRow"><input type="checkbox" data-key="results.showName"> The person's name and company</label>
+                <label class="choice-row"><input type="checkbox" data-key="results.showBand"> The band heading and description</label>
+                <label class="choice-row"><input type="checkbox" data-key="results.showCta"> A next step button</label>
+            </div>
+            <div class="row" data-show="results.showCta=true" style="margin-top:12px">
+                <div class="form-group">
+                    <label for="ctaText">Button text</label>
+                    <input type="text" id="ctaText" data-key="results.ctaText" placeholder="e.g. Book a call">
+                </div>
+                <div class="form-group">
+                    <label for="ctaLink">Button link</label>
+                    <input type="url" id="ctaLink" data-key="results.ctaLink" placeholder="https://example.co.za/contact">
+                </div>
+            </div>
+        </section>
+
+        <!-- Step 5 -->
+        <section class="step" data-title="Details to collect">
+            <h2>5. Details to collect</h2>
+            <p class="step-intro">Ask only for what you need. Fewer fields means more people finish.</p>
+            <div class="form-group">
+                <label>Ask for</label>
+                <div class="choice-group">
+                    <label class="choice-row"><input type="checkbox" data-key="details.name"> Name</label>
+                    <label class="choice-row"><input type="checkbox" data-key="details.email"> Email address</label>
+                    <label class="choice-row"><input type="checkbox" data-key="details.company"> Company</label>
+                    <label class="choice-row"><input type="checkbox" data-key="details.cell"> Cell phone</label>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="choice-row"><input type="checkbox" data-key="details.consent"> Show a consent tick box</label>
+                <input type="text" data-key="details.consentText" data-show="details.consent=true" style="margin-top:8px" aria-label="Consent wording">
+            </div>
+            <div class="form-group">
+                <label>What happens to the details?</label>
+                <div class="choice-group">
+                    <label class="choice-row"><input type="radio" name="dataUse" checked> Shown on the results screen only. Nothing is saved or sent.</label>
+                    <label class="choice-row disabled"><input type="radio" name="dataUse" disabled> Save each result to a database <span class="soon">Coming later</span></label>
+                    <label class="choice-row disabled"><input type="radio" name="dataUse" disabled> Email the result to the person and to me <span class="soon">Coming later</span></label>
+                    <label class="choice-row disabled"><input type="radio" name="dataUse" disabled> Send new contacts to my CRM <span class="soon">Coming later</span></label>
+                </div>
+                <p class="hint">The app will tell people that their details are not stored.</p>
+            </div>
+        </section>
+
+        <!-- Step 6 -->
+        <section class="step" data-title="Look and feel">
+            <h2>6. Look and feel</h2>
+            <p class="step-intro">Match your brand. You can change all of this later with a simple prompt.</p>
+            <div class="form-group">
+                <label for="logo">Link to your logo</label>
+                <input type="url" id="logo" data-key="look.logo" placeholder="https://example.co.za/logo.png">
+                <p class="hint">Optional. Right click your logo on your website and choose "Copy image address".</p>
+            </div>
+            <div class="row">
+                <div class="form-group"><label for="cBg">Background colour</label><input type="color" id="cBg" data-key="look.bg"></div>
+                <div class="form-group"><label for="cText">Text colour</label><input type="color" id="cText" data-key="look.text"></div>
+                <div class="form-group"><label for="cAccent">Headings and buttons</label><input type="color" id="cAccent" data-key="look.accent"></div>
+            </div>
+            <div class="row">
+                <div class="form-group">
+                    <label for="font">Font style</label>
+                    <select id="font" data-key="look.font">
+                        <option value="modern">Clean and modern</option>
+                        <option value="classic">Classic, with serif headings</option>
+                        <option value="friendly">Friendly and rounded</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="tone">Tone of the wording</label>
+                    <select id="tone" data-key="look.tone">
+                        <option value="warm">Warm and encouraging</option>
+                        <option value="professional">Professional and clear</option>
+                        <option value="direct">Direct and to the point</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="spelling">Spelling</label>
+                    <select id="spelling" data-key="look.spelling">
+                        <option>South African English</option>
+                        <option>UK English</option>
+                        <option>US English</option>
+                    </select>
+                </div>
+            </div>
+        </section>
+
+        <!-- Step 7 -->
+        <section class="step" data-title="Where it will live">
+            <h2>7. Where it will live</h2>
+            <p class="step-intro">Where will people take the assessment?</p>
+            <div class="form-group">
+                <div class="choice-group">
+                    <label class="choice-row"><input type="radio" name="target" data-key="publish.target" value="github"> Online, free, on GitHub Pages (recommended)</label>
+                    <label class="choice-row"><input type="radio" name="target" data-key="publish.target" value="wordpress"> On a page of my WordPress website</label>
+                    <label class="choice-row"><input type="radio" name="target" data-key="publish.target" value="local"> Only on my own computer for now</label>
+                    <label class="choice-row disabled"><input type="radio" name="target" disabled> On my own web address, such as quiz.mybusiness.co.za <span class="soon">Coming later</span></label>
+                </div>
+            </div>
+            <div class="form-group" data-show="publish.target=github">
+                <label for="repo">Short name for the app</label>
+                <input type="text" id="repo" data-key="publish.repo" placeholder="e.g. work-stress">
+                <p class="hint">Small letters and dashes only. It becomes part of the web link. Leave blank to use the assessment name.</p>
+            </div>
+            <div class="notice info" data-show="publish.target=github">You will need a free GitHub account. Sign up at github.com before the publishing step.</div>
+        </section>
+
+        <!-- Step 8 -->
+        <section class="step" data-title="Your prompts">
+            <h2>8. Your prompts</h2>
+            <p class="step-intro">Use these in order. Copy each one and paste it into Claude. Wait for Claude to finish before the next.</p>
+            <div id="briefCheck"></div>
+            <div class="toolbar">
+                <button type="button" class="btn" onclick="downloadPromptPack()">Download all prompts</button>
+                <button type="button" class="btn secondary" onclick="downloadBrief()">Save brief to a file</button>
+            </div>
+            <div id="promptPack"></div>
+            <div class="later">
+                <strong>Next level <span class="soon">Coming later</span></strong>
+                <ul>
+                    <li>Save every result to a database so you can follow up.</li>
+                    <li>Email a PDF report to the person and a copy to you.</li>
+                    <li>Send new contacts to your CRM.</li>
+                    <li>Use your own web address.</li>
+                </ul>
+            </div>
+        </section>
+
+        <div class="nav">
+            <button type="button" class="btn secondary" id="backBtn" onclick="goStep(current - 1)">Back</button>
+            <button type="button" class="btn" id="nextBtn" onclick="nextStep()">Next</button>
+        </div>
+    </div>
+
+    <div class="footer">
+        Built by Bruce Wade, EM Solutions and M37. <a href="../">Classic version</a>
+    </div>
+
+<script>
+var STORE_KEY = 'assessmentDeveloperV2';
+
+function blankBand() {
+    return { from: '', to: '', heading: '', description: '', cta: '' };
+}
+
+function defaults() {
+    return {
+        owner: { business: '', website: '' },
+        assessment: { name: '', measures: '', audience: '', outcome: '', intro: '', methodology: '' },
+        questions: {
+            type: 'yesNo', yesScores: 'yes', count: 10, mode: 'own', items: [], draftNotes: '',
+            scaleLow: 'Strongly disagree', scaleHigh: 'Strongly agree',
+            choices: [
+                { label: 'Never', points: 0 }, { label: 'Sometimes', points: 1 },
+                { label: 'Often', points: 2 }, { label: 'Always', points: 3 }
+            ]
+        },
+        flow: { oneAtATime: true, progress: true, back: true, autoAdvance: true },
+        scoring: { bands: [blankBand(), blankBand(), blankBand()] },
+        results: { showScore: true, showName: true, showBand: true, showCta: true, ctaText: '', ctaLink: '' },
+        details: { name: true, email: false, company: false, cell: false, consent: true, consentText: 'I agree that my answers are used to show my result.' },
+        look: { logo: '', bg: '#f5f7fb', text: '#1f2937', accent: '#1e3a8a', font: 'modern', tone: 'warm', spelling: 'South African English' },
+        publish: { target: 'github', repo: '' }
+    };
+}
+
+// Fill any keys missing from an older or partial brief
+function merge(base, extra) {
+    if (!extra || typeof extra !== 'object') return base;
+    Object.keys(base).forEach(function (k) {
+        if (!(k in extra)) return;
+        var b = base[k], e = extra[k];
+        if (b && typeof b === 'object' && !Array.isArray(b)) base[k] = merge(b, e);
+        else if (Array.isArray(b)) base[k] = Array.isArray(e) ? e : b;
+        else if (typeof e === typeof b) base[k] = e;
+    });
+    return base;
+}
+
+var brief = defaults();
+var current = 0;
+var steps = [];
+
+// ── State helpers ──
+function getPath(path) {
+    return path.split('.').reduce(function (o, k) { return o == null ? undefined : o[k]; }, brief);
+}
+
+function setPath(path, value) {
+    var keys = path.split('.'), o = brief;
+    for (var i = 0; i < keys.length - 1; i++) o = o[keys[i]];
+    o[keys[keys.length - 1]] = value;
+}
+
+function save() {
+    try { localStorage.setItem(STORE_KEY, JSON.stringify({ brief: brief, step: current })); } catch (e) {}
+}
+
+function restore() {
+    try {
+        var saved = JSON.parse(localStorage.getItem(STORE_KEY));
+        if (saved && saved.brief) {
+            brief = merge(defaults(), saved.brief);
+            current = saved.step || 0;
+        }
+    } catch (e) {}
+}
+
+// ── Binding form fields to the brief ──
+function bindFields() {
+    document.querySelectorAll('[data-key]').forEach(function (el) {
+        var handler = function () {
+            var key = el.getAttribute('data-key');
+            if (el.type === 'checkbox') setPath(key, el.checked);
+            else if (el.type === 'radio') { if (el.checked) setPath(key, el.value); }
+            else if (el.type === 'number') setPath(key, parseInt(el.value, 10) || 0);
+            else setPath(key, el.value);
+            if (key.indexOf('questions.') === 0) { renderQuestions(); renderChoices(); renderBands(); }
+            if (key.indexOf('details.') === 0) updateNameOption();
+            applyShows();
+            save();
+        };
+        el.addEventListener('input', handler);
+        el.addEventListener('change', handler);
+    });
+}
+
+function fillFields() {
+    document.querySelectorAll('[data-key]').forEach(function (el) {
+        var val = getPath(el.getAttribute('data-key'));
+        if (el.type === 'checkbox') el.checked = !!val;
+        else if (el.type === 'radio') el.checked = (el.value === val);
+        else el.value = (val == null ? '' : val);
+    });
+}
+
+// data-show="path=value" hides an element unless the brief matches
+function applyShows() {
+    document.querySelectorAll('[data-show]').forEach(function (el) {
+        var parts = el.getAttribute('data-show').split('=');
+        el.style.display = String(getPath(parts[0])) === parts[1] ? '' : 'none';
+    });
+}
+
+function updateNameOption() {
+    var d = brief.details;
+    document.getElementById('showNameRow').style.display = (d.name || d.company) ? '' : 'none';
+}
+
+// ── Questions ──
+function questionCount() {
+    var n = parseInt(brief.questions.count, 10);
+    return isNaN(n) ? 0 : Math.max(0, Math.min(50, n));
+}
+
+function renderQuestions() {
+    var list = document.getElementById('questionList');
+    var items = brief.questions.items;
+    var n = questionCount();
+    while (items.length < n) items.push({ text: '', reverse: false });
+    list.innerHTML = '';
+    for (var i = 0; i < n; i++) {
+        (function (i) {
+            var row = document.createElement('div');
+            row.className = 'question-row';
+            var num = document.createElement('span');
+            num.className = 'num';
+            num.textContent = (i + 1) + '.';
+            var input = document.createElement('input');
+            input.type = 'text';
+            input.value = items[i].text;
+            input.placeholder = 'Question ' + (i + 1);
+            input.setAttribute('aria-label', 'Question ' + (i + 1));
+            input.addEventListener('input', function () { items[i].text = input.value; input.classList.remove('invalid'); save(); });
+            var rev = document.createElement('label');
+            rev.className = 'rev';
+            var box = document.createElement('input');
+            box.type = 'checkbox';
+            box.checked = !!items[i].reverse;
+            box.addEventListener('change', function () { items[i].reverse = box.checked; save(); });
+            rev.appendChild(box);
+            rev.appendChild(document.createTextNode('Reverse'));
+            row.appendChild(num); row.appendChild(input); row.appendChild(rev);
+            list.appendChild(row);
+        })(i);
+    }
+}
+
+function renderChoices() {
+    var list = document.getElementById('choiceList');
+    var choices = brief.questions.choices;
+    list.innerHTML = '';
+    choices.forEach(function (c, i) {
+        var row = document.createElement('div');
+        row.className = 'option-row';
+        var label = document.createElement('input');
+        label.type = 'text'; label.value = c.label; label.placeholder = 'Option ' + (i + 1);
+        label.setAttribute('aria-label', 'Option ' + (i + 1));
+        label.addEventListener('input', function () { c.label = label.value; save(); });
+        var pts = document.createElement('input');
+        pts.type = 'number'; pts.value = c.points; pts.setAttribute('aria-label', 'Points for option ' + (i + 1));
+        pts.addEventListener('input', function () { c.points = parseInt(pts.value, 10) || 0; renderBands(); save(); });
+        var unit = document.createElement('span'); unit.textContent = 'points';
+        var del = document.createElement('button');
+        del.type = 'button'; del.className = 'btn link small'; del.textContent = 'Remove';
+        del.disabled = choices.length <= 2;
+        del.addEventListener('click', function () { choices.splice(i, 1); renderChoices(); renderBands(); save(); });
+        row.appendChild(label); row.appendChild(pts); row.appendChild(unit); row.appendChild(del);
+        list.appendChild(row);
+    });
+}
+
+function addChoice() {
+    if (brief.questions.choices.length >= 6) return;
+    brief.questions.choices.push({ label: '', points: brief.questions.choices.length });
+    renderChoices(); renderBands(); save();
+}
+
+// ── Scoring ──
+function scoreRange() {
+    var q = brief.questions, n = questionCount();
+    if (q.type === 'scale') return { min: n, max: n * 5 };
+    if (q.type === 'choice') {
+        var pts = q.choices.map(function (c) { return Number(c.points) || 0; });
+        return { min: n * Math.min.apply(null, pts), max: n * Math.max.apply(null, pts) };
+    }
+    return { min: 0, max: n };
+}
+
+function renderBands() {
+    var r = scoreRange();
+    var bands = brief.scoring.bands;
+    document.getElementById('scoreRange').textContent =
+        'With ' + questionCount() + ' questions, scores can run from ' + r.min + ' to ' + r.max + '.';
+    document.getElementById('bandCount').value = String(bands.length);
+    var list = document.getElementById('bandList');
+    list.innerHTML = '';
+    bands.forEach(function (b, i) {
+        var box = document.createElement('div');
+        box.className = 'band';
+        var title = document.createElement('div');
+        title.className = 'band-title';
+        title.textContent = 'Band ' + (i + 1) + (i === 0 ? ' (lowest scores)' : i === bands.length - 1 ? ' (highest scores)' : '');
+        box.appendChild(title);
+        var row = document.createElement('div');
+        row.className = 'row';
+        row.appendChild(bandField(b, 'from', 'Score from', 'number'));
+        row.appendChild(bandField(b, 'to', 'Score to', 'number'));
+        row.appendChild(bandField(b, 'heading', 'Heading', 'text', 'e.g. Low workplace stress'));
+        box.appendChild(row);
+        box.appendChild(bandField(b, 'description', 'Description', 'textarea', 'Two or three sentences about what this score means.'));
+        box.appendChild(bandField(b, 'cta', 'Next step text', 'text', 'e.g. Book a call to keep it that way.'));
+        list.appendChild(box);
+    });
+    checkBands();
+}
+
+function bandField(band, key, labelText, type, placeholder) {
+    var group = document.createElement('div');
+    group.className = 'form-group';
+    var label = document.createElement('label');
+    label.textContent = labelText;
+    var input = document.createElement(type === 'textarea' ? 'textarea' : 'input');
+    if (type !== 'textarea') input.type = type;
+    input.value = band[key];
+    if (placeholder) input.placeholder = placeholder;
+    input.addEventListener('input', function () {
+        band[key] = type === 'number' ? (input.value === '' ? '' : parseInt(input.value, 10)) : input.value;
+        if (type === 'number') checkBands();
+        save();
+    });
+    label.appendChild(input);
+    group.appendChild(label);
+    return group;
+}
+
+function setBandCount(n) {
+    n = parseInt(n, 10);
+    var bands = brief.scoring.bands;
+    while (bands.length < n) bands.push(blankBand());
+    bands.length = n;
+    suggestRanges();
+}
+
+function suggestRanges() {
+    var r = scoreRange(), bands = brief.scoring.bands, span = r.max - r.min + 1;
+    var start = r.min;
+    bands.forEach(function (b, i) {
+        var size = Math.round(span * (i + 1) / bands.length) - Math.round(span * i / bands.length);
+        b.from = start;
+        b.to = Math.max(start, start + size - 1);
+        start = b.to + 1;
+    });
+    bands[bands.length - 1].to = r.max;
+    renderBands(); save();
+}
+
+// Returns a list of problems with the score ranges
+function bandProblems() {
+    var r = scoreRange(), bands = brief.scoring.bands, problems = [];
+    var filled = bands.every(function (b) { return b.from !== '' && b.to !== ''; });
+    if (!filled) return ['Some score ranges are blank. Claude will choose them, or click "Suggest score ranges".'];
+    if (bands[0].from !== r.min) problems.push('Band 1 should start at ' + r.min + '.');
+    if (bands[bands.length - 1].to !== r.max) problems.push('The last band should end at ' + r.max + '.');
+    bands.forEach(function (b, i) {
+        if (b.from > b.to) problems.push('Band ' + (i + 1) + ' starts after it ends.');
+        if (i > 0 && b.from !== bands[i - 1].to + 1) problems.push('Band ' + (i + 1) + ' should start at ' + (bands[i - 1].to + 1) + ', straight after band ' + i + '.');
+    });
+    return problems;
+}
+
+function checkBands() {
+    var problems = bandProblems();
+    var el = document.getElementById('bandCheck');
+    el.className = 'notice ' + (problems.length ? 'warn' : 'ok');
+    el.textContent = problems.length ? problems.join(' ') : 'Every possible score falls in exactly one band.';
+}
+
+// ── Steps ──
+function buildStepper() {
+    steps = Array.prototype.slice.call(document.querySelectorAll('.step'));
+    var stepper = document.getElementById('stepper');
+    stepper.innerHTML = '';
+    steps.forEach(function (s, i) {
+        var b = document.createElement('button');
+        b.type = 'button';
+        b.textContent = (i + 1) + '. ' + s.getAttribute('data-title');
+        b.addEventListener('click', function () { goStep(i); });
+        stepper.appendChild(b);
+    });
+}
+
+function goStep(i) {
+    if (i < 0 || i >= steps.length) return;
+    current = i;
+    steps.forEach(function (s, j) { s.classList.toggle('active', j === i); });
+    Array.prototype.forEach.call(document.getElementById('stepper').children, function (b, j) {
+        b.classList.toggle('active', j === i);
+        b.classList.toggle('done', j < i);
+    });
+    document.getElementById('progressBar').style.width = ((i + 1) / steps.length * 100) + '%';
+    document.getElementById('backBtn').style.visibility = i === 0 ? 'hidden' : 'visible';
+    document.getElementById('nextBtn').style.display = i === steps.length - 1 ? 'none' : '';
+    document.getElementById('nextBtn').textContent = i === steps.length - 2 ? 'Show my prompts' : 'Next';
+    if (i === steps.length - 1) renderPromptPack();
+    save();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function nextStep() {
+    if (current === 1) {
+        var ok = true;
+        ['aName', 'aMeasures'].forEach(function (id) {
+            var el = document.getElementById(id);
+            var bad = !el.value.trim();
+            el.classList.toggle('invalid', bad);
+            if (bad) ok = false;
+        });
+        if (!ok) { alert('Please give the assessment a name and say what it measures.'); return; }
+    }
+    if (current === 2) {
+        var n = questionCount();
+        if (n < 1) { alert('Please choose how many questions, between 1 and 50.'); return; }
+        if (brief.questions.mode === 'own') {
+            var rows = document.querySelectorAll('#questionList input[type="text"]');
+            var missing = 0;
+            rows.forEach(function (el) { var bad = !el.value.trim(); el.classList.toggle('invalid', bad); if (bad) missing++; });
+            if (missing && !confirm(missing + ' question(s) are still blank. Claude will write those for you. Carry on?')) return;
+        }
+    }
+    goStep(current + 1);
+}
+
+// ── Prompt writing ──
+function slug(text) {
+    return String(text || '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '').slice(0, 40) || 'my-assessment';
+}
+
+function repoName() {
+    return brief.publish.repo ? slug(brief.publish.repo) : slug(brief.assessment.name);
+}
+
+function orBlank(text, fallback) {
+    text = String(text == null ? '' : text).trim();
+    return text ? text : fallback;
+}
+
+var FONT_TEXT = {
+    modern: 'A clean, modern sans serif font from Google Fonts, such as Inter or DM Sans.',
+    classic: 'A classic serif font for headings, such as DM Serif Display, with a clean sans serif for the body text. Both from Google Fonts.',
+    friendly: 'A friendly, rounded font from Google Fonts, such as Nunito.'
+};
+
+var TONE_TEXT = {
+    warm: 'warm and encouraging',
+    professional: 'professional and clear',
+    direct: 'direct and to the point'
+};
+
+function detailFields() {
+    var d = brief.details, f = [];
+    if (d.name) f.push('Name (required)');
+    if (d.email) f.push('Email address (required, check it looks like an email address)');
+    if (d.company) f.push('Company (optional)');
+    if (d.cell) f.push('Cell phone (required, at least 10 digits)');
+    return f;
+}
+
+function questionSection() {
+    var q = brief.questions, n = questionCount(), lines = [];
+    var hasReverse = q.mode === 'own' && q.items.slice(0, n).some(function (it) { return it.reverse; });
+
+    if (q.type === 'yesNo') {
+        var point = q.yesScores === 'yes' ? 'Yes' : 'No', other = point === 'Yes' ? 'No' : 'Yes';
+        lines.push('Answer type: two large buttons, Yes and No.');
+        lines.push('Scoring: each ' + point + ' scores 1 point. ' + other + ' scores 0.');
+        if (hasReverse) lines.push('Questions marked (reverse) score the other way round: ' + other + ' scores 1 point.');
+    } else if (q.type === 'scale') {
+        lines.push('Answer type: a 1 to 5 scale shown as five large buttons in a row. Label 1 "' + q.scaleLow + '" and 5 "' + q.scaleHigh + '".');
+        lines.push('Scoring: the number picked is the points scored.');
+        if (hasReverse) lines.push('Questions marked (reverse) score 6 minus the number picked.');
+    } else {
+        lines.push('Answer type: multiple choice. Every question uses the same options, shown as large buttons:');
+        q.choices.forEach(function (c) {
+            var pts = Number(c.points) || 0;
+            lines.push('- ' + orBlank(c.label, '(option)') + ': ' + pts + (pts === 1 ? ' point' : ' points'));
+        });
+        if (hasReverse) lines.push('Questions marked (reverse) score the options in the opposite order.');
+    }
+    lines.push('');
+
+    if (q.mode === 'own') {
+        var blanks = 0;
+        lines.push('Use these ' + n + ' questions in this order, worded exactly as written:');
+        for (var i = 0; i < n; i++) {
+            var it = q.items[i] || { text: '' };
+            if (!String(it.text).trim()) blanks++;
+            lines.push((i + 1) + '. ' + orBlank(it.text, '(write a question that fits)') + (it.reverse ? ' (reverse)' : ''));
+        }
+        if (blanks) lines.push('Where it says "write a question that fits", write one in the same style as the others.');
+    } else {
+        lines.push('Draft ' + n + ' clear, short questions that fit the description above.');
+        if (brief.assessment.methodology.trim()) lines.push('Base them on ' + brief.assessment.methodology.trim() + '.');
+        if (q.draftNotes.trim()) lines.push('Guidance: ' + q.draftNotes.trim());
+        lines.push('Before you write any code, show me the questions here and wait for my approval.');
+    }
+    return lines.join('\n');
+}
+
+function bandSection() {
+    var r = scoreRange(), bands = brief.scoring.bands, lines = [];
+    lines.push('The lowest possible score is ' + r.min + ' and the highest is ' + r.max + '. Use ' + bands.length + ' bands:');
+    bands.forEach(function (b, i) {
+        var range = (b.from !== '' && b.to !== '') ? 'Score ' + b.from + ' to ' + b.to : 'Score range to be set';
+        lines.push('');
+        lines.push((i + 1) + '. ' + range + ': ' + orBlank(b.heading, '(write a short heading)'));
+        lines.push('   Description: ' + orBlank(b.description, '(write two or three sentences on what this score means)'));
+        lines.push('   Next step: ' + orBlank(b.cta, '(write one sentence that invites them to take the next step)'));
+    });
+    if (bandProblems().length) {
+        lines.push('');
+        lines.push('Set the score ranges so that every score from ' + r.min + ' to ' + r.max + ' falls in exactly one band.');
+    }
+    return lines.join('\n');
+}
+
+function screensSection() {
+    var f = brief.flow, d = brief.details, res = brief.results, lines = [], fields = detailFields();
+
+    lines.push('1. Welcome screen');
+    lines.push('- Show the assessment name and this welcome line: ' + orBlank(brief.assessment.intro, '(write one or two sentences)'));
+    lines.push('- Show how many questions there are and roughly how long it takes.');
+    if (fields.length) {
+        lines.push('- Ask for: ' + fields.join('; ') + '.');
+        if (d.consent) lines.push('- Add a consent tick box that must be ticked before starting: "' + orBlank(d.consentText, 'I agree that my answers are used to show my result.') + '"');
+        lines.push('- Say in one short line that the details are only used to show the result and are not saved or sent anywhere. This must be true: do not save or send them.');
+        lines.push('- Show a friendly message next to any field that is missing or wrong.');
+    }
+    lines.push('- A Start button.');
+    lines.push('');
+
+    lines.push('2. Questions');
+    lines.push(f.oneAtATime ? '- Show one question at a time.' : '- Show all the questions on one page.');
+    if (f.progress) lines.push('- Show progress, for example "Question 3 of ' + questionCount() + '", with a progress bar.');
+    if (f.back) lines.push('- A Back button to change an earlier answer.');
+    if (f.autoAdvance && f.oneAtATime) lines.push('- Move to the next question automatically, after a short pause, once an answer is picked.');
+    lines.push('- A person must answer every question before seeing the result.');
+    lines.push('');
+
+    lines.push('3. Results screen');
+    if (res.showName && (d.name || d.company)) lines.push('- Greet the person by name' + (d.company ? ', with their company' : '') + '.');
+    if (res.showScore) lines.push('- Show the score out of ' + scoreRange().max + ', with a simple visual such as a bar or dots.');
+    if (res.showBand) lines.push('- Show the band heading and description, and use a different colour for each band.');
+    if (res.showCta) {
+        lines.push('- Show the next step text for their band, then a button labelled "' + orBlank(res.ctaText, 'Find out more') + '"' +
+            (res.ctaLink ? ' that opens ' + res.ctaLink + ' in a new tab.' : '. I will add the link later, so use # for now.'));
+    }
+    lines.push('- A "Start again" link that clears everything.');
+    return lines.join('\n');
+}
+
+function lookSection() {
+    var l = brief.look, lines = [];
+    if (l.logo) lines.push('- Show my logo at the top: ' + l.logo);
+    if (brief.owner.business) lines.push('- Show "' + brief.owner.business + '" at the top' + (brief.owner.website ? ', and link it to ' + brief.owner.website : '') + '.');
+    lines.push('- Background colour ' + l.bg + ', text colour ' + l.text + ', headings and buttons ' + l.accent + '. Keep good contrast so it is easy to read.');
+    lines.push('- ' + FONT_TEXT[l.font]);
+    lines.push('- Write every word in a ' + TONE_TEXT[l.tone] + ' tone, in ' + l.spelling + '.');
+    lines.push('- Mobile first. It must look good on a phone screen 375 pixels wide, with big buttons that are easy to tap.');
+    return lines.join('\n');
+}
+
+function targetSection() {
+    var t = brief.publish.target;
+    if (t === 'wordpress') {
+        return 'It will be pasted into a WordPress page with a Custom HTML block. So wrap everything in one <div id="assessment-app">, ' +
+            'put every CSS rule under #assessment-app so it does not clash with the theme, do not style html or body, ' +
+            'and make sure it works inside a narrow content column. It must also work on its own as index.html so I can test it first.';
+    }
+    if (t === 'local') return 'It will only be used on my own computer. It must work by double clicking index.html.';
+    return 'It will be published free on GitHub Pages, so it must be a plain static page with no server.';
+}
+
+function specBody() {
+    var a = brief.assessment, o = brief.owner;
+    var about = [
+        'Name: ' + a.name,
+        'Made for: ' + orBlank(o.business, 'me') + (o.website ? ' (' + o.website + ')' : ''),
+        'What it measures: ' + a.measures,
+        'Who takes it: ' + orBlank(a.audience, 'members of the public'),
+        'What I want them to do afterwards: ' + orBlank(a.outcome, 'get in touch with me'),
+        'Based on: ' + orBlank(a.methodology, 'no published method. Base it on the description above.')
+    ];
+    return 'ABOUT THE ASSESSMENT\n' + about.join('\n') +
+        '\n\nQUESTIONS\n' + questionSection() +
+        '\n\nRESULT BANDS\n' + bandSection() +
+        '\n\nSCREENS\n' + screensSection() +
+        '\n\nLOOK AND FEEL\n' + lookSection() +
+        '\n\nWHERE IT WILL LIVE\n' + targetSection();
+}
+
+function buildPromptCode() {
+    return 'I am new to coding. Please build me a simple assessment web app in this folder.\n\n' +
+        'WHAT TO BUILD\n' +
+        'Create one file called index.html. Put all the HTML, CSS and JavaScript in that one file. ' +
+        'No frameworks, no build step and nothing to install.\n\n' +
+        specBody() +
+        '\n\nWHEN YOU ARE DONE\n' +
+        'Open index.html in the preview so I can click through it. Then tell me in plain language what you built, ' +
+        'and which answers I should give to land in each result band.';
+}
+
+function buildPromptChat() {
+    return 'I am new to coding and I am using Claude in an ordinary chat. Please build me a simple assessment web app.\n\n' +
+        'WHAT TO BUILD\n' +
+        'One file called index.html, with all the HTML, CSS and JavaScript inside it. No frameworks and nothing to install. ' +
+        'Give me the complete code in one piece. Do not leave anything out.\n\n' +
+        specBody() +
+        '\n\nWHEN YOU ARE DONE\n' +
+        'Tell me in simple steps how to save the code as index.html on my computer and open it in my browser.';
+}
+
+function checkPrompt() {
+    return 'Please test the assessment app in index.html.\n\n' +
+        '1. Open it in the preview.\n' +
+        '2. Take the assessment ' + brief.scoring.bands.length + ' times, choosing answers that land in each result band.\n' +
+        '3. Check that the score is right and the right band shows each time.\n' +
+        '4. Check that every required field and the Back button work.\n' +
+        (brief.results.showCta ? '5. Check that the next step button opens the right link.\n' : '5. Check that "Start again" clears everything.\n') +
+        '6. Check that it looks good on a phone sized screen.\n' +
+        '7. Check the spelling is ' + brief.look.spelling + '.\n\n' +
+        'Fix anything that is wrong. Then tell me in plain language what you checked and what you fixed.';
+}
+
+function changePrompts() {
+    return [
+        'Make the answer buttons bigger and easier to tap on a phone.',
+        'Make the welcome text shorter and warmer. Two sentences at most.',
+        'Change the colour of the headings and buttons to [your colour]. Keep the text easy to read.',
+        'Change question [number] to read: [new wording]. Do not change anything else.',
+        'Add a small line at the bottom of every screen: Built by ' + orBlank(brief.owner.business, '[your name]') + '.',
+        'Something looks wrong. Here is what I see: [describe it]. Please fix it.',
+        'Undo your last change.'
+    ];
+}
+
+function publishPrompt() {
+    var t = brief.publish.target;
+    if (t === 'wordpress') {
+        return 'Please help me put this assessment on my WordPress website.\n\n' +
+            '1. Give me the part of index.html I need to paste into a Custom HTML block, as one code block.\n' +
+            '2. Give me short numbered steps for adding a Custom HTML block to a WordPress page and publishing it.\n' +
+            '3. Remind me to preview the page on my phone before I share the link.';
+    }
+    if (t === 'local') {
+        return 'Please tell me in simple steps how to open index.html on my computer, ' +
+            'and how to send it to someone else so they can open it too.';
+    }
+    return 'I want to put this app online for free with GitHub Pages. I have a GitHub account but I have never used Git.\n\n' +
+        '1. Check whether Git and the GitHub CLI (gh) are installed on this computer. If not, tell me exactly how to install them and wait for me.\n' +
+        '2. Help me sign in to GitHub from here. Tell me what to click when a browser window opens.\n' +
+        '3. Create a new public repository called ' + repoName() + ', add a short README.md, and upload index.html.\n' +
+        '4. Turn on GitHub Pages from the main branch.\n' +
+        '5. Give me the live link. Tell me it can take a minute or two to appear.\n\n' +
+        'Explain each step in one plain sentence before you do it.';
+}
+
+function updatePrompt() {
+    var t = brief.publish.target;
+    if (t === 'wordpress') return 'I have changed index.html. Give me the updated code for my WordPress Custom HTML block, as one code block.';
+    if (t === 'local') return 'I have changed index.html. Please check it still works by opening it in the preview.';
+    return 'I have changed index.html. Please publish the change to my GitHub repository ' + repoName() +
+        ' so the live site updates. Remind me that the live link can take a minute or two to change.';
+}
+
+function promptList() {
+    var target = brief.publish.target;
+    var publishTitle = target === 'wordpress' ? 'Put it on WordPress' : target === 'local' ? 'Open and share the file' : 'Publish it on GitHub Pages';
+    return [
+        { title: 'Build the app', when: 'In Claude Code, with your project folder open. If Claude shows you draft questions first, approve or change them.', text: buildPromptCode() },
+        { title: 'Check it works', when: 'Once the app appears in the preview.', text: checkPrompt() },
+        { title: 'Make changes', when: 'One change at a time. Look at the preview after each one.', list: changePrompts() },
+        { title: publishTitle, when: 'When you are happy with it.', text: publishPrompt() },
+        { title: 'Update it later', when: 'After any change, to update the live version.', text: updatePrompt() },
+        { title: 'No Claude Code? Use plain chat', when: 'Use this in an ordinary chat at claude.ai instead of prompt 1.', text: buildPromptChat() }
+    ];
+}
+
+// ── Prompt pack screen ──
+function renderPromptPack() {
+    var check = document.getElementById('briefCheck');
+    var problems = bandProblems();
+    check.className = 'notice ' + (problems.length ? 'warn' : 'ok');
+    check.textContent = problems.length
+        ? 'Your score ranges need a look (step 4). The prompt asks Claude to sort them out, but it is better to set them yourself.'
+        : 'Your brief is complete. Work through the prompts below in order.';
+
+    var pack = document.getElementById('promptPack');
+    pack.innerHTML = '';
+    promptList().forEach(function (p, i) {
+        var card = document.createElement('div');
+        card.className = 'prompt-card';
+        var head = document.createElement('div');
+        head.className = 'prompt-head';
+        var info = document.createElement('div');
+        var h = document.createElement('h4');
+        h.textContent = 'Prompt ' + (i + 1) + '. ' + p.title;
+        var when = document.createElement('p');
+        when.textContent = p.when;
+        info.appendChild(h); info.appendChild(when);
+        head.appendChild(info);
+        card.appendChild(head);
+
+        if (p.list) {
+            var ul = document.createElement('ul');
+            ul.className = 'change-list';
+            p.list.forEach(function (line) {
+                var li = document.createElement('li');
+                var span = document.createElement('span');
+                span.textContent = line;
+                li.appendChild(span);
+                li.appendChild(copyButton(line, 'Copy'));
+                ul.appendChild(li);
+            });
+            card.appendChild(ul);
+        } else {
+            head.appendChild(copyButton(p.text, 'Copy prompt'));
+            var pre = document.createElement('div');
+            pre.className = 'prompt-text';
+            pre.textContent = p.text;
+            card.appendChild(pre);
+        }
+        pack.appendChild(card);
+    });
+}
+
+function copyButton(text, label) {
+    var b = document.createElement('button');
+    b.type = 'button';
+    b.className = 'btn copy small';
+    b.textContent = label;
+    b.addEventListener('click', function () {
+        copyText(text, function () {
+            b.textContent = 'Copied';
+            b.classList.add('copied');
+            setTimeout(function () { b.textContent = label; b.classList.remove('copied'); }, 2000);
+        });
+    });
+    return b;
+}
+
+function copyText(text, done) {
+    var fallback = function () {
+        var ta = document.createElement('textarea');
+        ta.value = text;
+        ta.style.position = 'fixed'; ta.style.opacity = '0';
+        document.body.appendChild(ta);
+        ta.select();
+        try { document.execCommand('copy'); done(); }
+        catch (e) { alert('Copying did not work. Please select the text and copy it by hand.'); }
+        document.body.removeChild(ta);
+    };
+    if (navigator.clipboard && window.isSecureContext) navigator.clipboard.writeText(text).then(done, fallback);
+    else fallback();
+}
+
+// ── Files ──
+function download(filename, content, type) {
+    var blob = new Blob([content], { type: type });
+    var a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    setTimeout(function () { URL.revokeObjectURL(a.href); a.remove(); }, 500);
+}
+
+function downloadBrief() {
+    download(slug(brief.assessment.name) + '-brief.json', JSON.stringify(brief, null, 2), 'application/json');
+}
+
+function downloadPromptPack() {
+    var out = [brief.assessment.name || 'My assessment', 'Prompt pack from Assessment Developer', ''];
+    promptList().forEach(function (p, i) {
+        out.push('==============================');
+        out.push('PROMPT ' + (i + 1) + '. ' + p.title.toUpperCase());
+        out.push('When: ' + p.when);
+        out.push('==============================');
+        out.push(p.list ? p.list.map(function (l) { return '- ' + l; }).join('\n') : p.text);
+        out.push('');
+    });
+    download(slug(brief.assessment.name) + '-prompts.txt', out.join('\n'), 'text/plain');
+}
+
+function openBrief(input) {
+    var file = input.files[0];
+    if (!file) return;
+    var reader = new FileReader();
+    reader.onload = function () {
+        try {
+            brief = merge(defaults(), JSON.parse(reader.result));
+            refreshAll();
+            goStep(0);
+        } catch (e) {
+            alert('That file could not be read. Please choose a brief saved from this app.');
+        }
+        input.value = '';
+    };
+    reader.readAsText(file);
+}
+
+function startOver() {
+    if (!confirm('Clear everything and start a new brief?')) return;
+    brief = defaults();
+    refreshAll();
+    goStep(0);
+}
+
+function loadExample() {
+    if (brief.assessment.name && !confirm('Replace your brief with the example?')) return;
+    var b = defaults();
+    b.owner = { business: 'Jason Sandler Speaks', website: 'https://jasonsandlerspeaks.com' };
+    b.assessment = {
+        name: 'Work Place Stress Assessment',
+        measures: 'How much stress there is in a workplace, as seen by a manager or staff member.',
+        audience: 'Business owners, managers and staff',
+        outcome: 'Contact Jason Sandler about a talk, workshop or deeper assessment.',
+        intro: 'A brief, confidential assessment to help you evaluate the current levels of stress in your workplace and understand what to do next.',
+        methodology: ''
+    };
+    b.questions.items = [
+        'Do you or your colleagues feel that you are functioning close to burnout?',
+        'Have you or any colleagues considered making major changes, such as leaving your job, because of work related stress?',
+        'When workloads are at their highest, do you notice an increase in employees calling in sick?',
+        'Would you describe the energy and enthusiasm levels among staff in your workplace as generally low?',
+        'Do staff members feel afraid or uncomfortable admitting that they are struggling with stress at work?',
+        'Has your organisation experienced notable productivity or profit losses due to stress related absenteeism?',
+        'Do you believe that current stress levels are negatively affecting the quality of service your customers or clients receive?',
+        'Are conflicts, tensions or interpersonal friction between colleagues becoming more frequent in your workplace?',
+        'Do you find it difficult to mentally "switch off" from work stress during your personal time?',
+        'Do you feel that the current levels of stress in your workplace are unsustainable and need to be urgently addressed?'
+    ].map(function (t) { return { text: t, reverse: false }; });
+    b.scoring.bands = [
+        { from: 0, to: 3, heading: 'Low Workplace Stress',
+          description: 'Your responses indicate that your workplace is currently managing stress well. Maintaining these positive conditions is key to long term productivity, retention and staff wellbeing.',
+          cta: 'Connect with Jason Sandler to explore how to sustain your healthy, low stress workplace culture.' },
+        { from: 4, to: 6, heading: 'Medium Stressed Workplace',
+          description: 'Your responses suggest that stress is present and building in your workplace. These warning signs should not be ignored. A proactive approach now can prevent more serious issues later.',
+          cta: 'Contact Jason Sandler to explore a targeted workshop for your team.' },
+        { from: 7, to: 10, heading: 'Highly Stressed Workplace',
+          description: 'Your responses indicate a workplace under significant stress. This can seriously affect your team\'s health, morale and performance. Immediate attention is strongly recommended.',
+          cta: 'Reach out to Jason today for a more in depth assessment and a tailored plan.' }
+    ];
+    b.results.ctaText = 'Contact Jason Sandler';
+    b.results.ctaLink = 'https://jasonsandlerspeaks.com/Contact-Jason-Sandler.html';
+    b.details = { name: true, email: false, company: true, cell: true, consent: true, consentText: 'I agree that my answers are used to show my result.' };
+    b.look = { logo: '', bg: '#f7f5f0', text: '#1f2937', accent: '#0f4c5c', font: 'classic', tone: 'professional', spelling: 'South African English' };
+    b.publish = { target: 'github', repo: 'work-stress-demo' };
+    brief = b;
+    refreshAll();
+    goStep(0);
+}
+
+function refreshAll() {
+    fillFields();
+    renderQuestions();
+    renderChoices();
+    renderBands();
+    updateNameOption();
+    applyShows();
+    save();
+}
+
+// ── Start ──
+restore();
+buildStepper();
+bindFields();
+refreshAll();
+goStep(Math.min(current, steps.length - 1));
+</script>
+</body>
+</html>
