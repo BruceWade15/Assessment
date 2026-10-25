@@ -28,4 +28,4 @@ The brief saves in the browser as you go. It can also be saved to a file and ope
 - To run it on your own computer, open `index.html` or `v2/index.html` in a browser.
 - Hosted on GitHub Pages from this repo, so a push to the main branch updates the live site.
 
-Built by Bruce Wade, EM Solutions and M37.
+An app by M37. www.m37.co.za
