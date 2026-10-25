@@ -11,7 +11,7 @@ An eight step wizard:
 
 1. About you
 2. The assessment
-3. Questions (type your own, or let Claude draft them for approval)
+3. Questions (Yes or No, a 1 to 5 scale as buttons or a sliding button, or multiple choice; type your own, or let Claude draft them for approval)
 4. Scoring and results (score bands, headings, descriptions, next step button)
 5. Details to collect (with consent line; database, email and CRM options marked "coming later")
 6. Look and feel (logo, colours, font, tone, and the language of the assessment: South African, UK or US English, French or German; Claude still talks to you in English)

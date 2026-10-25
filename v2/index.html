@@ -16,7 +16,7 @@
             --muted: #5b6474;
             --line: #d9dee7;
             --soft: #eef2fb;
-            --page: #f0f2f6;
+            --page: #e1e4ea;
         }
 
         body {
@@ -200,7 +200,7 @@
             <p class="step-intro">Whose assessment is this? These details appear in the app and help Claude set the right voice.</p>
             <div class="form-group">
                 <label for="ownerBusiness">Your name or business name</label>
-                <input type="text" id="ownerBusiness" data-key="owner.business" placeholder="e.g. Jason Sandler Speaks">
+                <input type="text" id="ownerBusiness" data-key="owner.business" placeholder="e.g. Bright Path Coaching">
             </div>
             <div class="form-group">
                 <label for="ownerWebsite">Your website</label>
@@ -260,6 +260,14 @@
                     <option value="yes">Yes scores 1 point</option>
                     <option value="no">No scores 1 point</option>
                 </select>
+            </div>
+
+            <div class="form-group" data-show="questions.type=scale">
+                <label>Show the scale as</label>
+                <div class="choice-group">
+                    <label class="choice-row"><input type="radio" name="scaleStyle" data-key="questions.scaleStyle" value="buttons"> Five buttons in a row</label>
+                    <label class="choice-row"><input type="radio" name="scaleStyle" data-key="questions.scaleStyle" value="slider"> A sliding button from 1 to 5</label>
+                </div>
             </div>
 
             <div class="row" data-show="questions.type=scale">
@@ -501,7 +509,7 @@ function defaults() {
         assessment: { name: '', measures: '', audience: '', outcome: '', intro: '', methodology: '' },
         questions: {
             type: 'yesNo', yesScores: 'yes', count: 10, mode: 'own', items: [], draftNotes: '',
-            scaleLow: 'Strongly disagree', scaleHigh: 'Strongly agree',
+            scaleLow: 'Strongly disagree', scaleHigh: 'Strongly agree', scaleStyle: 'buttons',
             choices: [
                 { label: 'Never', points: 0 }, { label: 'Sometimes', points: 1 },
                 { label: 'Often', points: 2 }, { label: 'Always', points: 3 }
@@ -858,6 +866,10 @@ function detailFields() {
     return f;
 }
 
+function isSlider() {
+    return brief.questions.type === 'scale' && brief.questions.scaleStyle === 'slider';
+}
+
 function questionSection() {
     var q = brief.questions, n = questionCount(), lines = [];
     var hasReverse = q.mode === 'own' && q.items.slice(0, n).some(function (it) { return it.reverse; });
@@ -868,7 +880,13 @@ function questionSection() {
         lines.push('Scoring: each ' + point + ' scores 1 point. ' + other + ' scores 0.');
         if (hasReverse) lines.push('Questions marked (reverse) score the other way round: ' + other + ' scores 1 point.');
     } else if (q.type === 'scale') {
-        lines.push('Answer type: a 1 to 5 scale shown as five large buttons in a row. Label 1 "' + q.scaleLow + '" and 5 "' + q.scaleHigh + '".');
+        if (isSlider()) {
+            lines.push('Answer type: a 1 to 5 sliding button (a range slider) with whole number steps. Label the left end "' + q.scaleLow + '" and the right end "' + q.scaleHigh + '".');
+            lines.push('Show the number picked in large type above the slider. Make the slider wide and its handle big, so it is easy to drag on a phone. Tapping a point on the track should also work.');
+            lines.push('Start the handle in the middle, but treat the question as unanswered until the person moves or taps the slider.');
+        } else {
+            lines.push('Answer type: a 1 to 5 scale shown as five large buttons in a row. Label 1 "' + q.scaleLow + '" and 5 "' + q.scaleHigh + '".');
+        }
         lines.push('Scoring: the number picked is the points scored.');
         if (hasReverse) lines.push('Questions marked (reverse) score 6 minus the number picked.');
     } else {
@@ -935,7 +953,8 @@ function screensSection() {
     lines.push(f.oneAtATime ? '- Show one question at a time.' : '- Show all the questions on one page.');
     if (f.progress) lines.push('- Show progress, for example "Question 3 of ' + questionCount() + '", with a progress bar.');
     if (f.back) lines.push('- A Back button to change an earlier answer.');
-    if (f.autoAdvance && f.oneAtATime) lines.push('- Move to the next question automatically, after a short pause, once an answer is picked.');
+    if (isSlider()) lines.push('- Show a Next button under the slider. Do not move on automatically, because people adjust a slider before they settle.');
+    else if (f.autoAdvance && f.oneAtATime) lines.push('- Move to the next question automatically, after a short pause, once an answer is picked.');
     lines.push('- A person must answer every question before seeing the result.');
     lines.push('');
 
