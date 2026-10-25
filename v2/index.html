@@ -135,6 +135,20 @@
         .change-list li { display: flex; justify-content: space-between; gap: 10px; align-items: center; padding: 8px 0; border-bottom: 1px solid var(--line); }
         .change-list li:last-child { border-bottom: none; }
 
+        .option-picker { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 20px; }
+        .option-card {
+            text-align: left; background: white; border: 2px solid var(--line); border-radius: 8px;
+            padding: 14px 16px; cursor: pointer; font-family: inherit; font-size: 0.92rem; color: var(--muted);
+        }
+        .option-card strong { display: block; color: var(--ink); font-size: 1.05rem; margin: 2px 0 4px; }
+        .option-card .tag { font-size: 0.78rem; font-weight: bold; color: var(--navy); text-transform: uppercase; letter-spacing: 0.05em; }
+        .option-card.selected { border-color: var(--navy); background: var(--soft); }
+        .option-panel h3 { margin-top: 0; padding-top: 0; border-top: none; }
+        .how-box { border: 1px solid var(--line); border-radius: 8px; padding: 14px 18px; margin-bottom: 18px; background: #fafbfd; }
+        .how-box h4 { color: var(--navy); margin: 4px 0 6px; }
+        .how-box ul, .how-box ol { margin: 0 0 10px 22px; }
+        .how-box li { margin-bottom: 5px; }
+
         .later { border: 2px dashed #e7c88f; border-radius: 8px; padding: 14px 16px; background: #fffaf1; }
         .later ul { margin: 8px 0 0 20px; color: var(--muted); }
 
@@ -145,6 +159,7 @@
             .header h1 { font-size: 1.4rem; }
             .question-row { flex-wrap: wrap; }
             .question-row .num { width: auto; }
+            .option-picker { grid-template-columns: 1fr; }
         }
     </style>
 </head>
@@ -393,14 +408,17 @@
                     </select>
                 </div>
                 <div class="form-group">
-                    <label for="spelling">Spelling</label>
+                    <label for="spelling">Language of the assessment</label>
                     <select id="spelling" data-key="look.spelling">
                         <option>South African English</option>
                         <option>UK English</option>
                         <option>US English</option>
+                        <option>French</option>
+                        <option>German</option>
                     </select>
                 </div>
             </div>
+            <p class="hint">This is the language people see when they take the assessment. You can still type your questions in English. Claude will translate them, and will keep talking to you in English.</p>
         </section>
 
         <!-- Step 7 -->
@@ -426,13 +444,14 @@
         <!-- Step 8 -->
         <section class="step" data-title="Your prompts">
             <h2>8. Your prompts</h2>
-            <p class="step-intro">Use these in order. Copy each one and paste it into Claude. Wait for Claude to finish before the next.</p>
+            <p class="step-intro">There are two ways to build your app. Choose the one that suits you, then follow its steps.</p>
             <div id="briefCheck"></div>
-            <div class="toolbar">
-                <button type="button" class="btn" onclick="downloadPromptPack()">Download all prompts</button>
+            <div class="option-picker" id="optionPicker"></div>
+            <div id="optionPanel"></div>
+            <div class="toolbar" style="margin-top:8px">
+                <button type="button" class="btn" onclick="downloadPromptPack()">Download both options</button>
                 <button type="button" class="btn secondary" onclick="downloadBrief()">Save brief to a file</button>
             </div>
-            <div id="promptPack"></div>
             <div class="later">
                 <strong>Next level <span class="soon">Coming later</span></strong>
                 <ul>
@@ -478,7 +497,7 @@ function defaults() {
         results: { showScore: true, showName: true, showBand: true, showCta: true, ctaText: '', ctaLink: '' },
         details: { name: true, email: false, company: false, cell: false, consent: true, consentText: 'I agree that my answers are used to show my result.' },
         look: { logo: '', bg: '#f5f7fb', text: '#1f2937', accent: '#1e3a8a', font: 'modern', tone: 'warm', spelling: 'South African English' },
-        publish: { target: 'github', repo: '' }
+        publish: { target: 'github', repo: '', option: 'code' }
     };
 }
 
@@ -923,9 +942,37 @@ function lookSection() {
     if (brief.owner.business) lines.push('- Show "' + brief.owner.business + '" at the top' + (brief.owner.website ? ', and link it to ' + brief.owner.website : '') + '.');
     lines.push('- Background colour ' + l.bg + ', text colour ' + l.text + ', headings and buttons ' + l.accent + '. Keep good contrast so it is easy to read.');
     lines.push('- ' + FONT_TEXT[l.font]);
-    lines.push('- Write every word in a ' + TONE_TEXT[l.tone] + ' tone, in ' + l.spelling + '.');
+    lines.push('- Write every word in a ' + TONE_TEXT[l.tone] + ' tone.');
     lines.push('- Mobile first. It must look good on a phone screen 375 pixels wide, with big buttons that are easy to tap.');
     return lines.join('\n');
+}
+
+var LANG_CODE = {
+    'South African English': 'en-ZA', 'UK English': 'en-GB', 'US English': 'en-US', 'French': 'fr', 'German': 'de'
+};
+
+function isTranslated() {
+    return brief.look.spelling === 'French' || brief.look.spelling === 'German';
+}
+
+function languageSection() {
+    var lang = brief.look.spelling, lines = [];
+    if (!isTranslated()) {
+        lines.push('- Everything the person sees is in ' + lang + ', with ' + lang + ' spelling.');
+    } else {
+        lines.push('- Everything the person sees in the app must be in ' + lang + ': the welcome screen, questions, answer buttons, messages, results and button text.');
+        lines.push('- Much of my wording above is in English. Translate it into natural, well written ' + lang + '. Keep the meaning of every question exactly the same.');
+        lines.push('- Keep talking to me in English, and write any code comments in English.');
+        if (brief.questions.mode === 'draft') lines.push('- When you show me the draft questions, give each one in ' + lang + ' with an English translation underneath.');
+    }
+    lines.push('- Set the html lang attribute to "' + (LANG_CODE[lang] || 'en') + '".');
+    return lines.join('\n');
+}
+
+function languageCheck() {
+    return isTranslated()
+        ? 'Check that every word the person sees is in ' + brief.look.spelling + ', with nothing left in English.'
+        : 'Check the spelling is ' + brief.look.spelling + '.';
 }
 
 function targetSection() {
@@ -954,6 +1001,7 @@ function specBody() {
         '\n\nRESULT BANDS\n' + bandSection() +
         '\n\nSCREENS\n' + screensSection() +
         '\n\nLOOK AND FEEL\n' + lookSection() +
+        '\n\nLANGUAGE\n' + languageSection() +
         '\n\nWHERE IT WILL LIVE\n' + targetSection();
 }
 
@@ -986,7 +1034,7 @@ function checkPrompt() {
         '4. Check that every required field and the Back button work.\n' +
         (brief.results.showCta ? '5. Check that the next step button opens the right link.\n' : '5. Check that "Start again" clears everything.\n') +
         '6. Check that it looks good on a phone sized screen.\n' +
-        '7. Check the spelling is ' + brief.look.spelling + '.\n\n' +
+        '7. ' + languageCheck() + '\n\n' +
         'Fix anything that is wrong. Then tell me in plain language what you checked and what you fixed.';
 }
 
@@ -1031,17 +1079,118 @@ function updatePrompt() {
         ' so the live site updates. Remind me that the live link can take a minute or two to change.';
 }
 
-function promptList() {
-    var target = brief.publish.target;
+function checkPromptChat() {
+    return 'Please read through the code you gave me and check it carefully.\n\n' +
+        '1. Work out the score for answers that land in each of the ' + brief.scoring.bands.length + ' result bands, and check the right band shows each time.\n' +
+        '2. Check that every required field and the Back button work.\n' +
+        '3. Check that it will look good on a phone sized screen.\n' +
+        '4. ' + languageCheck() + '\n\n' +
+        'Fix anything that is wrong. Tell me in plain language what you fixed, then give me the complete corrected file in one piece.';
+}
+
+// The two ways to build: Claude Code (option 1) or plain Claude chat (option 2)
+function optionPacks() {
+    var target = brief.publish.target, repo = repoName(), folder = 'Documents\\' + repo;
+
+    var code = { key: 'code', tag: 'Option 1' };
+    var codeBefore = ['A paid Claude plan (Pro or higher) and the Claude desktop app, from claude.ai/download.'];
+    if (target === 'github') {
+        code.title = 'Claude Code and GitHub';
+        code.summary = 'Claude builds the app in a folder on your computer, tests it, and puts it online for you.';
+        codeBefore.push('A free GitHub account, from github.com.');
+    } else if (target === 'wordpress') {
+        code.title = 'Claude Code and WordPress';
+        code.summary = 'Claude builds and tests the app on your computer, then gives you the code for your WordPress page.';
+        codeBefore.push('Your WordPress login.');
+    } else {
+        code.title = 'Claude Code on your computer';
+        code.summary = 'Claude builds and tests the app in a folder on your computer.';
+    }
+    codeBefore.push('A new, empty folder for this app, for example ' + folder + '.');
+    code.before = codeBefore;
+
+    var codeSteps = [];
+    if (target === 'github') codeSteps.push('Sign in to GitHub at github.com in your web browser. Leave it open.');
+    if (target === 'wordpress') codeSteps.push('Sign in to your WordPress dashboard in your web browser. Leave it open.');
+    codeSteps.push(
+        'Open the Claude desktop app and click the Code tab.',
+        'Choose your new folder as the project folder. Leave permissions on "Ask", so Claude checks with you before it changes anything.',
+        'Copy Prompt 1 below, paste it into Claude and press Enter. Wait for Claude to finish. If it shows you draft questions, approve them or say what to change.',
+        'Look at the app in the preview. Click through it as a visitor would.',
+        'Copy Prompt 2, so Claude tests every result for you.',
+        'Use the change prompts in Prompt 3, one at a time, until you are happy.'
+    );
+    if (target === 'github') codeSteps.push('Copy Prompt 4 to publish. When a browser window opens, sign in to GitHub and click Authorise. Claude gives you the live link.');
+    else if (target === 'wordpress') codeSteps.push('Copy Prompt 4. Claude gives you the code for a Custom HTML block and the steps to add it to a page.');
+    else codeSteps.push('Copy Prompt 4 to learn how to open the file and share it.');
+    codeSteps.push(target === 'local' ? 'Open index.html and take the assessment once more.' : 'Open the page on your phone and take the assessment once more.');
+    code.steps = codeSteps;
+
     var publishTitle = target === 'wordpress' ? 'Put it on WordPress' : target === 'local' ? 'Open and share the file' : 'Publish it on GitHub Pages';
-    return [
-        { title: 'Build the app', when: 'In Claude Code, with your project folder open. If Claude shows you draft questions first, approve or change them.', text: buildPromptCode() },
+    code.prompts = [
+        { title: 'Build the app', when: 'Step ' + (target === 'local' ? 3 : 4) + ' above.', text: buildPromptCode() },
         { title: 'Check it works', when: 'Once the app appears in the preview.', text: checkPrompt() },
         { title: 'Make changes', when: 'One change at a time. Look at the preview after each one.', list: changePrompts() },
         { title: publishTitle, when: 'When you are happy with it.', text: publishPrompt() },
-        { title: 'Update it later', when: 'After any change, to update the live version.', text: updatePrompt() },
-        { title: 'No Claude Code? Use plain chat', when: 'Use this in an ordinary chat at claude.ai instead of prompt 1.', text: buildPromptChat() }
+        { title: 'Update it later', when: 'In the same folder, after any change.', text: updatePrompt() }
     ];
+
+    var chat = {
+        key: 'chat', tag: 'Option 2', title: 'Claude chat and a file on your computer',
+        summary: 'Claude writes the code in an ordinary chat. You save it as a file and open it in your browser.',
+        before: [
+            'A Claude account, from claude.ai. Use it in your web browser or in the Chat tab of the Claude app.',
+            'A folder on your computer for this app, for example ' + folder + '.',
+            'Notepad on Windows, or TextEdit on a Mac.'
+        ]
+    };
+    var chatSteps = [
+        'Sign in at claude.ai and start a new chat.',
+        'Copy Prompt 1 below, paste it into the chat and press Enter. If Claude shows you draft questions, approve them or say what to change.',
+        'Claude writes the code. It may also show a preview of the app beside the chat. Click through it.',
+        'Copy Prompt 2 into the same chat, so Claude checks its own work and gives you the corrected file.',
+        'Copy all of the code. Use the Copy button on the code block.',
+        'Open Notepad (Windows) or TextEdit (Mac) and paste the code. On a Mac, choose Format, then Make Plain Text.',
+        'Save it in your folder as index.html. In Notepad, set "Save as type" to "All files", so it does not become index.html.txt.',
+        'Double click index.html. It opens in your web browser. Take the assessment.',
+        'To change something, use a change prompt from Prompt 3 in the same chat. Save the new code over your old index.html.'
+    ];
+    if (target === 'github') {
+        chatSteps.push('To put it online, sign in at github.com. Create a new public repository called ' + repo +
+            '. Click "Add file", then "Upload files", and add index.html. Then go to Settings, then Pages, and deploy from the main branch. ' +
+            'Your link will be yourname.github.io/' + repo + '.');
+    } else if (target === 'wordpress') {
+        chatSteps.push('To put it on your website, copy Prompt 4 into the same chat and follow the steps Claude gives you.');
+    } else {
+        chatSteps.push('To share it, send index.html to anyone. It opens in any web browser.');
+    }
+    chat.steps = chatSteps;
+    chat.prompts = [
+        { title: 'Build the app', when: 'Step 2 above.', text: buildPromptChat() },
+        { title: 'Check it', when: 'Straight after Claude gives you the code.', text: checkPromptChat() },
+        { title: 'Make changes', when: 'One change at a time, in the same chat.', list: changePrompts().map(function (p) {
+            return p === 'Undo your last change.' ? 'Undo your last change and give me the complete file again.' : p + ' Then give me the complete updated file.';
+        }) }
+    ];
+    if (target === 'wordpress') chat.prompts.push({ title: 'Put it on WordPress', when: 'When you are happy with it.', text: publishPrompt() });
+
+    return [code, chat];
+}
+
+function heading(tag, text) {
+    var el = document.createElement(tag);
+    el.textContent = text;
+    return el;
+}
+
+function listOf(tag, items) {
+    var list = document.createElement(tag);
+    items.forEach(function (text) {
+        var li = document.createElement('li');
+        li.textContent = text;
+        list.appendChild(li);
+    });
+    return list;
 }
 
 // ── Prompt pack screen ──
@@ -1051,11 +1200,42 @@ function renderPromptPack() {
     check.className = 'notice ' + (problems.length ? 'warn' : 'ok');
     check.textContent = problems.length
         ? 'Your score ranges need a look (step 4). The prompt asks Claude to sort them out, but it is better to set them yourself.'
-        : 'Your brief is complete. Work through the prompts below in order.';
+        : 'Your brief is complete.';
 
-    var pack = document.getElementById('promptPack');
+    var packs = optionPacks();
+    var picker = document.getElementById('optionPicker');
+    picker.innerHTML = '';
+    packs.forEach(function (o) {
+        var b = document.createElement('button');
+        b.type = 'button';
+        b.className = 'option-card' + (brief.publish.option === o.key ? ' selected' : '');
+        b.setAttribute('aria-pressed', brief.publish.option === o.key ? 'true' : 'false');
+        var tag = document.createElement('span'); tag.className = 'tag'; tag.textContent = o.tag;
+        var t = document.createElement('strong'); t.textContent = o.title;
+        var s = document.createElement('span'); s.textContent = o.summary;
+        b.appendChild(tag); b.appendChild(t); b.appendChild(s);
+        b.addEventListener('click', function () { brief.publish.option = o.key; save(); renderPromptPack(); });
+        picker.appendChild(b);
+    });
+
+    var o = brief.publish.option === 'chat' ? packs[1] : packs[0];
+    var pack = document.getElementById('optionPanel');
     pack.innerHTML = '';
-    promptList().forEach(function (p, i) {
+    pack.className = 'option-panel';
+
+    var h = document.createElement('h3');
+    h.textContent = o.tag + '. ' + o.title;
+    pack.appendChild(h);
+
+    var how = document.createElement('div');
+    how.className = 'how-box';
+    how.appendChild(heading('h4', 'Before you start, you need'));
+    how.appendChild(listOf('ul', o.before));
+    how.appendChild(heading('h4', 'Steps'));
+    how.appendChild(listOf('ol', o.steps));
+    pack.appendChild(how);
+
+    o.prompts.forEach(function (p, i) {
         var card = document.createElement('div');
         card.className = 'prompt-card';
         var head = document.createElement('div');
@@ -1139,12 +1319,26 @@ function downloadBrief() {
 
 function downloadPromptPack() {
     var out = [brief.assessment.name || 'My assessment', 'Prompt pack from Assessment Developer', ''];
-    promptList().forEach(function (p, i) {
-        out.push('==============================');
-        out.push('PROMPT ' + (i + 1) + '. ' + p.title.toUpperCase());
-        out.push('When: ' + p.when);
-        out.push('==============================');
-        out.push(p.list ? p.list.map(function (l) { return '- ' + l; }).join('\n') : p.text);
+    optionPacks().forEach(function (o) {
+        out.push('##############################################');
+        out.push((o.tag + '. ' + o.title).toUpperCase());
+        out.push(o.summary);
+        out.push('##############################################');
+        out.push('');
+        out.push('Before you start, you need:');
+        o.before.forEach(function (b) { out.push('- ' + b); });
+        out.push('');
+        out.push('Steps:');
+        o.steps.forEach(function (s, i) { out.push((i + 1) + '. ' + s); });
+        out.push('');
+        o.prompts.forEach(function (p, i) {
+            out.push('==============================');
+            out.push('PROMPT ' + (i + 1) + '. ' + p.title.toUpperCase());
+            out.push('When: ' + p.when);
+            out.push('==============================');
+            out.push(p.list ? p.list.map(function (l) { return '- ' + l; }).join('\n') : p.text);
+            out.push('');
+        });
         out.push('');
     });
     download(slug(brief.assessment.name) + '-prompts.txt', out.join('\n'), 'text/plain');
@@ -1213,7 +1407,8 @@ function loadExample() {
     b.results.ctaLink = 'https://jasonsandlerspeaks.com/Contact-Jason-Sandler.html';
     b.details = { name: true, email: false, company: true, cell: true, consent: true, consentText: 'I agree that my answers are used to show my result.' };
     b.look = { logo: '', bg: '#f7f5f0', text: '#1f2937', accent: '#0f4c5c', font: 'classic', tone: 'professional', spelling: 'South African English' };
-    b.publish = { target: 'github', repo: 'work-stress-demo' };
+    b.publish.target = 'github';
+    b.publish.repo = 'work-stress-demo';
     brief = b;
     refreshAll();
     goStep(0);
