@@ -16,8 +16,8 @@ An eight step wizard:
 6. Look and feel (logo, colours, font, tone, and the language of the assessment: South African, UK or US English, French or German; Claude still talks to you in English)
 7. Where it will live (GitHub Pages, WordPress or own computer)
 8. Your prompts, in two options, each with what you need, numbered steps and its own prompts:
-   * Option 1. Claude Code and GitHub: build, check, change, publish, update
-   * Option 2. Claude chat and a file on your computer: build, check, change, then save as index.html
+   * Option 1. Claude chat and a file on your computer: build, check, change, then save as index.html
+   * Option 2. Claude Code and GitHub: build, check, change, publish, update
 
 The brief saves in the browser as you go. It can also be saved to a file and opened again. "Load example" fills in the Work Place Stress Assessment.
 

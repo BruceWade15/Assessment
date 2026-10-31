@@ -518,7 +518,7 @@ function defaults() {
         results: { showScore: true, showName: true, showBand: true, showCta: true, ctaText: '', ctaLink: '' },
         details: { name: true, email: false, company: false, cell: false, consent: true, consentText: 'I agree that my answers are used to show my result.' },
         look: { logo: '', bg: '#f5f7fb', text: '#1f2937', accent: '#1e3a8a', font: 'modern', tone: 'warm', spelling: 'South African English' },
-        publish: { target: 'github', repo: '', option: 'code' }
+        publish: { target: 'github', repo: '', option: 'chat' }
     };
 }
 
@@ -1120,11 +1120,11 @@ function checkPromptChat() {
         'Fix anything that is wrong. Tell me in plain language what you fixed, then give me the complete corrected file in one piece.';
 }
 
-// The two ways to build: Claude Code (option 1) or plain Claude chat (option 2)
+// The two ways to build: plain Claude chat (option 1) or Claude Code (option 2)
 function optionPacks() {
     var target = brief.publish.target, repo = repoName(), folder = 'Documents\\' + repo;
 
-    var code = { key: 'code', tag: 'Option 1' };
+    var code = { key: 'code', tag: 'Option 2' };
     var codeBefore = ['A paid Claude plan (Pro or higher) and the Claude desktop app, from claude.ai/download.'];
     if (target === 'github') {
         code.title = 'Claude Code and GitHub';
@@ -1168,7 +1168,7 @@ function optionPacks() {
     ];
 
     var chat = {
-        key: 'chat', tag: 'Option 2', title: 'Claude chat and a file on your computer',
+        key: 'chat', tag: 'Option 1', title: 'Claude chat and a file on your computer',
         summary: 'Claude writes the code in an ordinary chat. You save it as a file and open it in your browser.',
         before: [
             'A Claude account, from claude.ai. Use it in your web browser or in the Chat tab of the Claude app.',
@@ -1206,7 +1206,7 @@ function optionPacks() {
     ];
     if (target === 'wordpress') chat.prompts.push({ title: 'Put it on WordPress', when: 'When you are happy with it.', text: publishPrompt() });
 
-    return [code, chat];
+    return [chat, code];
 }
 
 function heading(tag, text) {
@@ -1250,7 +1250,7 @@ function renderPromptPack() {
         picker.appendChild(b);
     });
 
-    var o = brief.publish.option === 'chat' ? packs[1] : packs[0];
+    var o = packs.filter(function (p) { return p.key === brief.publish.option; })[0] || packs[0];
     var pack = document.getElementById('optionPanel');
     pack.innerHTML = '';
     pack.className = 'option-panel';
