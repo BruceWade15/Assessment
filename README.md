@@ -1,6 +1,6 @@
 # Assessment Developer
 
-A guided brief for a new assessment app. Answer the questions and it writes the prompts that build the app with Claude.
+A guided brief for a new assessment app. Answer the questions and it writes the prompts that build the app with Claude or another AI chat.
 
 **Live:** https://brucewade15.github.io/Assessment/v2/
 
@@ -16,7 +16,7 @@ An eight step wizard:
 6. Look and feel (logo, colours, font, tone, and the language of the assessment: South African, UK or US English, French or German; Claude still talks to you in English)
 7. Where it will live (GitHub Pages, WordPress or own computer)
 8. Your prompts, in two options, each with what you need, numbered steps and its own prompts:
-   * Option 1. Claude chat and a file on your computer: build, check, change, then save as index.html
+   * Option 1. Any AI chat (Claude, ChatGPT, Grok, Gemini, Copilot) and a file on your computer: build, check, change, then save as index.html
    * Option 2. Claude Code and GitHub: build, check, change, publish, update
 
 The brief saves in the browser as you go. It can also be saved to a file and opened again. "Load example" fills in the Work Place Stress Assessment.

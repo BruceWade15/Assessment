@@ -144,6 +144,9 @@
         .option-card .tag { font-size: 0.78rem; font-weight: bold; color: var(--navy); text-transform: uppercase; letter-spacing: 0.05em; }
         .option-card.selected { border-color: var(--navy); background: var(--soft); }
         .option-panel h3 { margin-top: 0; padding-top: 0; border-top: none; }
+        .ai-pick { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-bottom: 14px; }
+        .ai-pick label { margin: 0; font-weight: bold; color: var(--ink); }
+        .ai-pick select { width: auto; min-width: 180px; }
         .how-box { border: 1px solid var(--line); border-radius: 8px; padding: 14px 18px; margin-bottom: 18px; background: #fafbfd; }
         .how-box h4 { color: var(--navy); margin: 4px 0 6px; }
         .how-box ul, .how-box ol { margin: 0 0 10px 22px; }
@@ -178,7 +181,7 @@
     <div class="header">
         <img src="m37-logo.png" alt="M37" width="70" height="80">
         <h1>Assessment Developer</h1>
-        <p>Answer a few questions. Get the prompts that build your assessment app with Claude.</p>
+        <p>Answer a few questions. Get the prompts that build your assessment app with Claude or your own AI chat.</p>
     </div>
 
     <div class="container">
@@ -195,7 +198,7 @@
         <!-- Step 1 -->
         <section class="step" data-title="About you">
             <h2>1. About you</h2>
-            <p class="step-intro">Whose assessment is this? These details appear in the app and help Claude set the right voice.</p>
+            <p class="step-intro">Whose assessment is this? These details appear in the app and help the AI set the right voice.</p>
             <div class="form-group">
                 <label for="ownerBusiness">Your name or business name</label>
                 <input type="text" id="ownerBusiness" data-key="owner.business" placeholder="e.g. Bright Path Coaching">
@@ -230,7 +233,7 @@
             <div class="form-group">
                 <label for="aIntro">Welcome line</label>
                 <textarea id="aIntro" data-key="assessment.intro" placeholder="e.g. A short, confidential check on the stress levels in your workplace."></textarea>
-                <p class="hint">Optional. One or two sentences for the first screen. Leave blank and Claude will write one.</p>
+                <p class="hint">Optional. One or two sentences for the first screen. Leave blank and the AI will write one.</p>
             </div>
             <div class="form-group">
                 <label for="aMethod">Is it based on a published method or model?</label>
@@ -241,7 +244,7 @@
         <!-- Step 3 -->
         <section class="step" data-title="Questions">
             <h2>3. Questions</h2>
-            <p class="step-intro">Choose how people answer, then write your questions or let Claude draft them.</p>
+            <p class="step-intro">Choose how people answer, then write your questions or let the AI draft them.</p>
 
             <div class="form-group">
                 <label>How will people answer?</label>
@@ -296,7 +299,7 @@
                 <label>Who writes the questions?</label>
                 <div class="choice-group">
                     <label class="choice-row"><input type="radio" name="qMode" data-key="questions.mode" value="own"> I will type my own questions</label>
-                    <label class="choice-row"><input type="radio" name="qMode" data-key="questions.mode" value="draft"> Let Claude draft them, and show them to me first</label>
+                    <label class="choice-row"><input type="radio" name="qMode" data-key="questions.mode" value="draft"> Let the AI draft them, and show them to me first</label>
                 </div>
             </div>
 
@@ -307,7 +310,7 @@
             </div>
 
             <div class="form-group" data-show="questions.mode=draft">
-                <label for="draftNotes">Anything Claude should know when drafting?</label>
+                <label for="draftNotes">Anything the AI should know when drafting?</label>
                 <textarea id="draftNotes" data-key="questions.draftNotes" placeholder="e.g. Cover workload, sleep, relationships and energy. Keep each question under 20 words."></textarea>
             </div>
 
@@ -344,7 +347,7 @@
 
             <div id="bandList"></div>
             <div id="bandCheck"></div>
-            <p class="hint">Leave a heading, description or next step blank and Claude will write it for you.</p>
+            <p class="hint">Leave a heading, description or next step blank and the AI will write it for you.</p>
 
             <h3>The results screen shows</h3>
             <div class="choice-group">
@@ -436,7 +439,7 @@
                     </select>
                 </div>
             </div>
-            <p class="hint">This is the language people see when they take the assessment. You can still type your questions in English. Claude will translate them, and will keep talking to you in English.</p>
+            <p class="hint">This is the language people see when they take the assessment. You can still type your questions in English. The AI will translate them, and will keep talking to you in English.</p>
         </section>
 
         <!-- Step 7 -->
@@ -518,7 +521,7 @@ function defaults() {
         results: { showScore: true, showName: true, showBand: true, showCta: true, ctaText: '', ctaLink: '' },
         details: { name: true, email: false, company: false, cell: false, consent: true, consentText: 'I agree that my answers are used to show my result.' },
         look: { logo: '', bg: '#f5f7fb', text: '#1f2937', accent: '#1e3a8a', font: 'modern', tone: 'warm', spelling: 'South African English' },
-        publish: { target: 'github', repo: '', option: 'chat' }
+        publish: { target: 'github', repo: '', option: 'chat', ai: 'Claude' }
     };
 }
 
@@ -757,7 +760,7 @@ function suggestRanges() {
 function bandProblems() {
     var r = scoreRange(), bands = brief.scoring.bands, problems = [];
     var filled = bands.every(function (b) { return b.from !== '' && b.to !== ''; });
-    if (!filled) return ['Some score ranges are blank. Claude will choose them, or click "Suggest score ranges".'];
+    if (!filled) return ['Some score ranges are blank. The AI will choose them, or click "Suggest score ranges".'];
     if (bands[0].from !== r.min) problems.push('Band 1 should start at ' + r.min + '.');
     if (bands[bands.length - 1].to !== r.max) problems.push('The last band should end at ' + r.max + '.');
     bands.forEach(function (b, i) {
@@ -823,7 +826,7 @@ function nextStep() {
             var rows = document.querySelectorAll('#questionList input[type="text"]');
             var missing = 0;
             rows.forEach(function (el) { var bad = !el.value.trim(); el.classList.toggle('invalid', bad); if (bad) missing++; });
-            if (missing && !confirm(missing + ' question(s) are still blank. Claude will write those for you. Carry on?')) return;
+            if (missing && !confirm(missing + ' question(s) are still blank. The AI will write those for you. Carry on?')) return;
         }
     }
     goStep(current + 1);
@@ -1049,10 +1052,10 @@ function buildPromptCode() {
 }
 
 function buildPromptChat() {
-    return 'I am new to coding and I am using Claude in an ordinary chat. Please build me a simple assessment web app.\n\n' +
+    return 'I am new to coding and I am using an AI chat. Please build me a simple assessment web app.\n\n' +
         'WHAT TO BUILD\n' +
         'One file called index.html, with all the HTML, CSS and JavaScript inside it. No frameworks and nothing to install. ' +
-        'Give me the complete code in one piece. Do not leave anything out.\n\n' +
+        'Give me the complete code in one piece, in a single code block. Never leave parts out, and never write "rest of the code unchanged" or similar.\n\n' +
         specBody() +
         '\n\nWHEN YOU ARE DONE\n' +
         'Tell me in simple steps how to save the code as index.html on my computer and open it in my browser.';
@@ -1117,10 +1120,13 @@ function checkPromptChat() {
         '2. Check that every required field and the Back button work.\n' +
         '3. Check that it will look good on a phone sized screen.\n' +
         '4. ' + languageCheck() + '\n\n' +
-        'Fix anything that is wrong. Tell me in plain language what you fixed, then give me the complete corrected file in one piece.';
+        'Fix anything that is wrong. Tell me in plain language what you fixed, then give me the complete corrected file in one piece. Never leave parts out.';
 }
 
-// The two ways to build: plain Claude chat (option 1) or Claude Code (option 2)
+// AI chats for option 1, with the address to sign in at
+var AI_SITES = { 'Claude': 'claude.ai', 'ChatGPT': 'chatgpt.com', 'Grok': 'grok.com', 'Gemini': 'gemini.google.com', 'Copilot': 'copilot.microsoft.com', 'Another AI': '' };
+
+// The two ways to build: any AI chat (option 1) or Claude Code (option 2)
 function optionPacks() {
     var target = brief.publish.target, repo = repoName(), folder = 'Documents\\' + repo;
 
@@ -1167,21 +1173,23 @@ function optionPacks() {
         { title: 'Update it later', when: 'In the same folder, after any change.', text: updatePrompt() }
     ];
 
+    var ai = AI_SITES.hasOwnProperty(brief.publish.ai) ? brief.publish.ai : 'Claude';
+    var site = AI_SITES[ai], who = site ? ai : 'The AI', whoSmall = site ? ai : 'the AI';
     var chat = {
-        key: 'chat', tag: 'Option 1', title: 'Claude chat and a file on your computer',
-        summary: 'Claude writes the code in an ordinary chat. You save it as a file and open it in your browser.',
+        key: 'chat', tag: 'Option 1', title: 'Any AI chat and a file on your computer',
+        summary: 'Claude, ChatGPT, Grok or another AI writes the code in an ordinary chat. You save it as a file and open it in your browser.',
         before: [
-            'A Claude account, from claude.ai. Use it in your web browser or in the Chat tab of the Claude app.',
+            site ? 'A ' + ai + ' account, from ' + site + '. A free plan is enough to start.' : 'An account with the AI chat you use. A free plan is enough to start.',
             'A folder on your computer for this app, for example ' + folder + '.',
             'Notepad on Windows, or TextEdit on a Mac.'
         ]
     };
     var chatSteps = [
-        'Sign in at claude.ai and start a new chat.',
-        'Copy Prompt 1 below, paste it into the chat and press Enter. If Claude shows you draft questions, approve them or say what to change.',
-        'Claude writes the code. It may also show a preview of the app beside the chat. Click through it.',
-        'Copy Prompt 2 into the same chat, so Claude checks its own work and gives you the corrected file.',
-        'Copy all of the code. Use the Copy button on the code block.',
+        site ? 'Sign in at ' + site + ' and start a new chat.' : 'Open your AI chat and start a new chat.',
+        'Copy Prompt 1 below, paste it into the chat and press Enter. If ' + whoSmall + ' shows you draft questions, approve them or say what to change.',
+        who + ' writes the code. Some AI chats also show a preview of the app beside the chat. If yours does, click through it.',
+        'Copy Prompt 2 into the same chat, so ' + whoSmall + ' checks its own work and gives you the corrected file.',
+        'Copy all of the code. Use the Copy button on the code block. If the code comes in pieces, or says "rest of the code unchanged", ask: "Please give me the complete file in one piece."',
         'Open Notepad (Windows) or TextEdit (Mac) and paste the code. On a Mac, choose Format, then Make Plain Text.',
         'Save it in your folder as index.html. In Notepad, set "Save as type" to "All files", so it does not become index.html.txt.',
         'Double click index.html. It opens in your web browser. Take the assessment.',
@@ -1192,14 +1200,14 @@ function optionPacks() {
             '. Click "Add file", then "Upload files", and add index.html. Then go to Settings, then Pages, and deploy from the main branch. ' +
             'Your link will be yourname.github.io/' + repo + '.');
     } else if (target === 'wordpress') {
-        chatSteps.push('To put it on your website, copy Prompt 4 into the same chat and follow the steps Claude gives you.');
+        chatSteps.push('To put it on your website, copy Prompt 4 into the same chat and follow the steps ' + whoSmall + ' gives you.');
     } else {
         chatSteps.push('To share it, send index.html to anyone. It opens in any web browser.');
     }
     chat.steps = chatSteps;
     chat.prompts = [
         { title: 'Build the app', when: 'Step 2 above.', text: buildPromptChat() },
-        { title: 'Check it', when: 'Straight after Claude gives you the code.', text: checkPromptChat() },
+        { title: 'Check it', when: 'Straight after ' + whoSmall + ' gives you the code.', text: checkPromptChat() },
         { title: 'Make changes', when: 'One change at a time, in the same chat.', list: changePrompts().map(function (p) {
             return p === 'Undo your last change.' ? 'Undo your last change and give me the complete file again.' : p + ' Then give me the complete updated file.';
         }) }
@@ -1231,7 +1239,7 @@ function renderPromptPack() {
     var problems = bandProblems();
     check.className = 'notice ' + (problems.length ? 'warn' : 'ok');
     check.textContent = problems.length
-        ? 'Your score ranges need a look (step 4). The prompt asks Claude to sort them out, but it is better to set them yourself.'
+        ? 'Your score ranges need a look (step 4). The prompt asks the AI to sort them out, but it is better to set them yourself.'
         : 'Your brief is complete.';
 
     var packs = optionPacks();
@@ -1258,6 +1266,25 @@ function renderPromptPack() {
     var h = document.createElement('h3');
     h.textContent = o.tag + '. ' + o.title;
     pack.appendChild(h);
+
+    if (o.key === 'chat') {
+        var pick = document.createElement('div');
+        pick.className = 'ai-pick';
+        var lab = document.createElement('label');
+        lab.htmlFor = 'aiChoice';
+        lab.textContent = 'Which AI chat will you use?';
+        var sel = document.createElement('select');
+        sel.id = 'aiChoice';
+        Object.keys(AI_SITES).forEach(function (name) {
+            var opt = document.createElement('option');
+            opt.value = name; opt.textContent = name;
+            if (name === brief.publish.ai) opt.selected = true;
+            sel.appendChild(opt);
+        });
+        sel.addEventListener('change', function () { brief.publish.ai = sel.value; save(); renderPromptPack(); });
+        pick.appendChild(lab); pick.appendChild(sel);
+        pack.appendChild(pick);
+    }
 
     var how = document.createElement('div');
     how.className = 'how-box';
