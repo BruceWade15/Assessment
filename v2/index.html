@@ -318,8 +318,8 @@
             <div class="choice-group">
                 <label class="choice-row"><input type="checkbox" data-key="flow.oneAtATime"> One question at a time</label>
                 <label class="choice-row"><input type="checkbox" data-key="flow.progress"> Show a progress bar</label>
-                <label class="choice-row"><input type="checkbox" data-key="flow.back"> Allow going back to change an answer</label>
-                <label class="choice-row"><input type="checkbox" data-key="flow.autoAdvance"> Move on automatically once an answer is picked</label>
+                <label class="choice-row"><input type="checkbox" data-key="flow.back"> Allow going back to change an answer (one at a time only)</label>
+                <label class="choice-row"><input type="checkbox" data-key="flow.autoAdvance"> Move on automatically once an answer is picked (one at a time only)</label>
             </div>
         </section>
 
@@ -951,11 +951,18 @@ function screensSection() {
     lines.push('');
 
     lines.push('2. Questions');
-    lines.push(f.oneAtATime ? '- Show one question at a time.' : '- Show all the questions on one page.');
-    if (f.progress) lines.push('- Show progress, for example "Question 3 of ' + questionCount() + '", with a progress bar.');
-    if (f.back) lines.push('- A Back button to change an earlier answer.');
-    if (isSlider()) lines.push('- Show a Next button under the slider. Do not move on automatically, because people adjust a slider before they settle.');
-    else if (f.autoAdvance && f.oneAtATime) lines.push('- Move to the next question automatically, after a short pause, once an answer is picked.');
+    if (f.oneAtATime) {
+        lines.push('- Show one question at a time.');
+        if (f.progress) lines.push('- Show progress, for example "Question 3 of ' + questionCount() + '", with a progress bar.');
+        if (f.back) lines.push('- A Back button to change an earlier answer.');
+        if (isSlider()) lines.push('- Show a Next button under the slider. Do not move on automatically, because people adjust a slider before they settle.');
+        else if (f.autoAdvance) lines.push('- Move to the next question automatically, after a short pause, once an answer is picked.');
+    } else {
+        // All on one page: no Next or Back buttons, so progress counts answers instead
+        lines.push('- Show all the questions on one page, numbered, in a single scrolling list.');
+        if (f.progress) lines.push('- Show progress as questions are answered, for example "3 of ' + questionCount() + ' answered", with a progress bar that stays visible at the top while scrolling.');
+        lines.push('- Put a "See my result" button at the bottom. If any question is unanswered, scroll to the first one and point it out kindly.');
+    }
     lines.push('- A person must answer every question before seeing the result.');
     lines.push('');
 
