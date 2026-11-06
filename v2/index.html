@@ -1047,29 +1047,42 @@ function specBody() {
         '\n\nWHERE IT WILL LIVE\n' + targetSection();
 }
 
+// Each prompt says which step it is, so the AI does one step and then asks for the next
+function stepStart(n, total, what) {
+    return 'This is step ' + n + ' of ' + total + (what ? ': ' + what : '') + '. ' +
+        (n === 1 ? 'We will build this app together one step at a time, and I will paste the prompt for each step in turn. ' : '') +
+        'Only do what this prompt asks.\n\n';
+}
+
+function chatSteps() { return brief.publish.target === 'wordpress' ? 4 : 3; }
+
 function buildPromptCode() {
-    return 'I am new to coding. Please build me a simple assessment web app in this folder.\n\n' +
+    return stepStart(1, 4, 'build the app') +
+        'I am new to coding. Please build me a simple assessment web app in this folder.\n\n' +
         'WHAT TO BUILD\n' +
         'Create one file called index.html. Put all the HTML, CSS and JavaScript in that one file. ' +
         'No frameworks, no build step and nothing to install.\n\n' +
         specBody() +
         '\n\nWHEN YOU ARE DONE\n' +
-        'Open index.html in the preview so I can click through it. Then tell me in plain language what you built, ' +
-        'and which answers I should give to land in each result band.';
+        'Open index.html in the preview so I can click through it. Then tell me in plain language what you built. ' +
+        'Do not test the scoring and do not publish yet. Finish by asking me to paste the step 2 prompt.';
 }
 
 function buildPromptChat() {
-    return 'I am new to coding and I am using an AI chat. Please build me a simple assessment web app.\n\n' +
+    return stepStart(1, chatSteps(), 'build the app') +
+        'I am new to coding and I am using an AI chat. Please build me a simple assessment web app.\n\n' +
         'WHAT TO BUILD\n' +
         'One file called index.html, with all the HTML, CSS and JavaScript inside it. No frameworks and nothing to install. ' +
         'Give me the complete code in one piece, in a single code block. Never leave parts out, and never write "rest of the code unchanged" or similar.\n\n' +
         specBody() +
         '\n\nWHEN YOU ARE DONE\n' +
-        'Tell me in simple steps how to save the code as index.html on my computer and open it in my browser.';
+        'Tell me in simple steps how to save the code as index.html on my computer and open it in my browser. ' +
+        'Do not check the scoring yet. Finish by asking me to paste the step 2 prompt.';
 }
 
 function checkPrompt() {
-    return 'Please test the assessment app in index.html.\n\n' +
+    return stepStart(2, 4, 'test and fix') +
+        'Please test the assessment app in index.html. Do not publish it.\n\n' +
         '1. Open it in the preview.\n' +
         '2. Take the assessment ' + brief.scoring.bands.length + ' times, choosing answers that land in each result band.\n' +
         '3. Check that the score is right and the right band shows each time.\n' +
@@ -1077,7 +1090,10 @@ function checkPrompt() {
         (brief.results.showCta ? '5. Check that the next step button opens the right link.\n' : '5. Check that "Start again" clears everything.\n') +
         '6. Check that it looks good on a phone sized screen.\n' +
         '7. ' + languageCheck() + '\n\n' +
-        'Fix anything that is wrong. Then tell me in plain language what you checked and what you fixed.';
+        'Fix anything that is wrong. Then tell me in plain language what you checked and what you fixed, ' +
+        'and which answers to give to land in each result band, so I can try them myself.\n\n' +
+        'NEXT: in step 3 I will send you changes, one at a time. Make each change, show it in the preview, and wait for the next one. ' +
+        'Do not publish until I send the step 4 prompt. Finish by asking me for my first change, or for the step 4 prompt if I am happy.';
 }
 
 function changePrompts() {
@@ -1094,23 +1110,24 @@ function changePrompts() {
 
 function publishPrompt() {
     var t = brief.publish.target;
+    var start = 'This is step 4 of 4. I am happy with the app. ';
     if (t === 'wordpress') {
-        return 'Please help me put this assessment on my WordPress website.\n\n' +
+        return start + 'Please help me put this assessment on my WordPress website.\n\n' +
             '1. Give me the part of index.html I need to paste into a Custom HTML block, as one code block.\n' +
             '2. Give me short numbered steps for adding a Custom HTML block to a WordPress page and publishing it.\n' +
             '3. Remind me to preview the page on my phone before I share the link.';
     }
     if (t === 'local') {
-        return 'Please tell me in simple steps how to open index.html on my computer, ' +
+        return start + 'Please tell me in simple steps how to open index.html on my computer, ' +
             'and how to send it to someone else so they can open it too.';
     }
-    return 'I want to put this app online for free with GitHub Pages. I have a GitHub account but I have never used Git.\n\n' +
+    return start + 'Now I want to put it online for free with GitHub Pages. I have a GitHub account but I have never used Git.\n\n' +
         '1. Check whether Git and the GitHub CLI (gh) are installed on this computer. If not, tell me exactly how to install them and wait for me.\n' +
         '2. Help me sign in to GitHub from here. Tell me what to click when a browser window opens.\n' +
         '3. Create a new public repository called ' + repoName() + ', add a short README.md, and upload index.html.\n' +
         '4. Turn on GitHub Pages from the main branch.\n' +
         '5. Give me the live link. Tell me it can take a minute or two to appear.\n\n' +
-        'Explain each step in one plain sentence before you do it.';
+        'Explain each step in one plain sentence before you do it. When the live link works, stop.';
 }
 
 function updatePrompt() {
@@ -1122,12 +1139,17 @@ function updatePrompt() {
 }
 
 function checkPromptChat() {
-    return 'Please read through the code you gave me and check it carefully.\n\n' +
+    return stepStart(2, chatSteps(), 'check and fix') +
+        'Please read through the code you gave me and check it carefully.\n\n' +
         '1. Work out the score for answers that land in each of the ' + brief.scoring.bands.length + ' result bands, and check the right band shows each time.\n' +
         '2. Check that every required field and the Back button work.\n' +
         '3. Check that it will look good on a phone sized screen.\n' +
         '4. ' + languageCheck() + '\n\n' +
-        'Fix anything that is wrong. Tell me in plain language what you fixed, then give me the complete corrected file in one piece. Never leave parts out.';
+        'Fix anything that is wrong. Tell me in plain language what you fixed, then give me the complete corrected file in one piece. Never leave parts out. ' +
+        'Then tell me which answers to give to land in each result band, so I can try them myself.\n\n' +
+        'NEXT: in step 3 I will send you changes, one at a time. After each change, give me the complete updated file and wait for the next one. ' +
+        (brief.publish.target === 'wordpress' ? 'Do not give me the WordPress steps until I send the step 4 prompt. ' : '') +
+        'Finish by asking me for my first change.';
 }
 
 // AI chats for option 1, with the address to sign in at
@@ -1160,7 +1182,7 @@ function optionPacks() {
     codeSteps.push(
         'Open the Claude desktop app and click the Code tab.',
         'Choose your new folder as the project folder. Leave permissions on "Ask", so Claude checks with you before it changes anything.',
-        'Copy Prompt 1 below, paste it into Claude and press Enter. Wait for Claude to finish. If it shows you draft questions, approve them or say what to change.',
+        'Copy Prompt 1 below, paste it into Claude and press Enter. If it shows you draft questions, approve them or say what to change. Wait for Claude to finish and ask you for step 2.',
         'Look at the app in the preview. Click through it as a visitor would.',
         'Copy Prompt 2, so Claude tests every result for you.',
         'Use the change prompts in Prompt 3, one at a time, until you are happy.'
@@ -1300,6 +1322,11 @@ function renderPromptPack() {
     how.appendChild(heading('h4', 'Steps'));
     how.appendChild(listOf('ol', o.steps));
     pack.appendChild(how);
+
+    var one = document.createElement('div');
+    one.className = 'notice info';
+    one.textContent = 'Paste one prompt at a time. Wait for ' + (o.key === 'code' ? 'Claude' : 'the AI') + ' to finish and ask for the next step before you paste the next prompt.';
+    pack.appendChild(one);
 
     o.prompts.forEach(function (p, i) {
         var card = document.createElement('div');
