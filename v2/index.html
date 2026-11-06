@@ -1108,14 +1108,22 @@ function changePrompts() {
     ];
 }
 
-function publishPrompt() {
+// The last step of publishing: a QR code of the live link, for slides, flyers and WhatsApp
+var QR_CODE_STEP = 'Make a QR code image of the live link, so people can scan it with a phone camera. ' +
+    'Save it as qr-code.png in this folder, check that it opens the right link, and show it to me.';
+var QR_CHAT_STEP = 'Make me a QR code image of the page link, so people can scan it with a phone camera. ' +
+    'If you cannot make images, tell me how to make one with a free QR code maker.';
+
+function publishPrompt(forChat) {
     var t = brief.publish.target;
     var start = 'This is step 4 of 4. I am happy with the app. ';
     if (t === 'wordpress') {
         return start + 'Please help me put this assessment on my WordPress website.\n\n' +
             '1. Give me the part of index.html I need to paste into a Custom HTML block, as one code block.\n' +
             '2. Give me short numbered steps for adding a Custom HTML block to a WordPress page and publishing it.\n' +
-            '3. Remind me to preview the page on my phone before I share the link.';
+            '3. Remind me to preview the page on my phone before I share the link.\n' +
+            '4. Ask me for the link of the published page. Then ' + (forChat ? QR_CHAT_STEP : QR_CODE_STEP).replace(/^Make/, 'make').replace('the live link', 'that link') + '\n\n' +
+            'When I have the QR code, stop.';
     }
     if (t === 'local') {
         return start + 'Please tell me in simple steps how to open index.html on my computer, ' +
@@ -1126,8 +1134,9 @@ function publishPrompt() {
         '2. Help me sign in to GitHub from here. Tell me what to click when a browser window opens.\n' +
         '3. Create a new public repository called ' + repoName() + ', add a short README.md, and upload index.html.\n' +
         '4. Turn on GitHub Pages from the main branch.\n' +
-        '5. Give me the live link. Tell me it can take a minute or two to appear.\n\n' +
-        'Explain each step in one plain sentence before you do it. When the live link works, stop.';
+        '5. Give me the live link. Tell me it can take a minute or two to appear.\n' +
+        '6. When the live link works, ' + QR_CODE_STEP.replace(/^Make/, 'make').replace('of the live link', 'of it') + '\n\n' +
+        'Explain each step in one plain sentence before you do it. When the QR code is saved, stop.';
 }
 
 function updatePrompt() {
@@ -1187,8 +1196,8 @@ function optionPacks() {
         'Copy Prompt 2, so Claude tests every result for you.',
         'Use the change prompts in Prompt 3, one at a time, until you are happy.'
     );
-    if (target === 'github') codeSteps.push('Copy Prompt 4 to publish. When a browser window opens, sign in to GitHub and click Authorise. Claude gives you the live link.');
-    else if (target === 'wordpress') codeSteps.push('Copy Prompt 4. Claude gives you the code for a Custom HTML block and the steps to add it to a page.');
+    if (target === 'github') codeSteps.push('Copy Prompt 4 to publish. When a browser window opens, sign in to GitHub and click Authorise. Claude gives you the live link and a QR code for it.');
+    else if (target === 'wordpress') codeSteps.push('Copy Prompt 4. Claude gives you the code for a Custom HTML block and the steps to add it to a page. Then it makes a QR code of the page link.');
     else codeSteps.push('Copy Prompt 4 to learn how to open the file and share it.');
     codeSteps.push(target === 'local' ? 'Open index.html and take the assessment once more.' : 'Open the page on your phone and take the assessment once more.');
     code.steps = codeSteps;
@@ -1228,6 +1237,8 @@ function optionPacks() {
         chatSteps.push('To put it online, sign in at github.com. Create a new public repository called ' + repo +
             '. Click "Add file", then "Upload files", and add index.html. Then go to Settings, then Pages, and deploy from the main branch. ' +
             'Your link will be yourname.github.io/' + repo + '.');
+        chatSteps.push('Last, make a QR code of your live link. Ask in the same chat: "Make me a QR code image of this link: yourname.github.io/' + repo +
+            ', so people can scan it with a phone camera. If you cannot make images, tell me how to make one with a free QR code maker."');
     } else if (target === 'wordpress') {
         chatSteps.push('To put it on your website, copy Prompt 4 into the same chat and follow the steps ' + whoSmall + ' gives you.');
     } else {
@@ -1241,7 +1252,7 @@ function optionPacks() {
             return p === 'Undo your last change.' ? 'Undo your last change and give me the complete file again.' : p + ' Then give me the complete updated file.';
         }) }
     ];
-    if (target === 'wordpress') chat.prompts.push({ title: 'Put it on WordPress', when: 'When you are happy with it.', text: publishPrompt() });
+    if (target === 'wordpress') chat.prompts.push({ title: 'Put it on WordPress', when: 'When you are happy with it.', text: publishPrompt(true) });
 
     return [chat, code];
 }
